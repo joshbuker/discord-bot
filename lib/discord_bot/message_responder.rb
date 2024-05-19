@@ -26,7 +26,8 @@ module DiscordBot
     end
 
     def reply_to_message(user_message)
-      user_message.reply_with('uwu')
+      response = ModelResponse.new(user_message)
+      user_message.reply_with(response.message)
     end
 
     def no_action(user_message)

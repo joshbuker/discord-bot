@@ -1,10 +1,8 @@
 {
   "name": "Ruby",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
-
-  "runArgs": ["--env-file", ".env"],
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "bot",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
   // Configure tool-specific properties.
   "customizations": {
@@ -17,15 +15,6 @@
     }
   },
 
-  // Set the environment variables
-  // "runArgs": ["--env-file",".env"],
-
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  //   "forwardPorts": [],
-
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "bash .devcontainer/postcreate.sh",
-
-  // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode"
+  "postCreateCommand": "bash .devcontainer/postcreate.sh"
 }
