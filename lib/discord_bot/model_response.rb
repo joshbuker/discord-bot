@@ -1,15 +1,21 @@
 module DiscordBot
   class ModelResponse
-    MODEL_URL = 'http://llm:11434/api/generate'
+    MODEL_URL = 'http://llm:11434/api/chat'
 
-    def initialize(user_message)
+    def initialize(conversation_history:, user_message:)
       @user_message = user_message
+
+      conversation_history.append(
+        role: 'user',
+        message: user_message.message.content
+      )
 
       url = MODEL_URL
 
       payload = {
         model: 'llama3',
         stream: false,
+        messages: conversation_history.messages,
         prompt: user_message.message.content
       }.to_json
 
@@ -20,10 +26,15 @@ module DiscordBot
 
       @response = RestClient.post(url, payload, headers)
       @body = JSON.parse(@response.body)
+
+      conversation_history.append(
+        role: 'assistant',
+        message: message
+      )
     end
 
     def message
-      @body['response']
+      @body['message']['content']
     end
   end
 end

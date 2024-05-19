@@ -4,6 +4,10 @@ module DiscordBot
       @event = event
     end
 
+    def channel
+      @event.channel
+    end
+
     def message
       @event.message
     end
