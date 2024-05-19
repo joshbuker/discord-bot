@@ -5,10 +5,6 @@ module DiscordBot
         121475289397198848
       ]
 
-      def name
-        :exit
-      end
-
       def description
         'Shutdown the bot'
       end

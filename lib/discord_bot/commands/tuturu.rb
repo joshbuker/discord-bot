@@ -1,10 +1,6 @@
 module DiscordBot
   module Commands
     class Tuturu < Base
-      def name
-        :tuturu
-      end
-
       def description
         'Play a fun sound in your current voice channel'
       end

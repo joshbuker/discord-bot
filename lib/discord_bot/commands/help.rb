@@ -1,10 +1,6 @@
 module DiscordBot
   module Commands
     class Help < Base
-      def name
-        :help
-      end
-
       def description
         'Provides a full list of commands in chat'
       end

@@ -1,10 +1,6 @@
 module DiscordBot
   module Commands
     class Source < Base
-      def name
-        :source
-      end
-
       def description
         'Provides the source code for Ruby'
       end

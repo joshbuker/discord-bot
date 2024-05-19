@@ -24,6 +24,7 @@ module DiscordBot
 end
 
 discord_bot = DiscordBot::Bot.new(
-  discord_bot_token: ENV['RUBY_DISCORD_BOT_TOKEN']
+  discord_bot_token: ENV['RUBY_DISCORD_BOT_TOKEN'],
+  refresh_commands: false
 )
 discord_bot.run

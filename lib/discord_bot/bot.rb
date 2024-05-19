@@ -25,9 +25,13 @@ module DiscordBot
         DiscordBot::Commands::Tuturu.new(bot: self)
       ]
 
-      Logger.log 'Registering commands...'
-      register_commands if refresh_commands
-      # TODO: Remove unused commands
+      if refresh_commands
+        Logger.log 'Registering commands...'
+        register_commands
+        # TODO: Remove unused commands
+      else
+        Logger.log 'Skipping command refresh...'
+      end
       Logger.log 'Initializing callbacks...'
       initialize_callbacks
     end

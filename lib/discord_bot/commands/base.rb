@@ -1,3 +1,5 @@
+require 'active_support/inflector'
+
 module DiscordBot
   module Commands
     class Base
@@ -24,11 +26,11 @@ module DiscordBot
       end
 
       def name
-        :base
+        self.class.name.demodulize.underscore.to_sym
       end
 
       def description
-        'Unnamed Command'
+        'Description unavailable for this command'
       end
     end
   end
