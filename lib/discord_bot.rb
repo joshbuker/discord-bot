@@ -46,8 +46,7 @@ module DiscordBot
     end
 
     def reply_to_message(event)
-      event.user.pm 'uwu'
-      event.respond 'uwu'
+      event.message.reply! 'uwu'
     end
 
     def connect_to_channel(event)
