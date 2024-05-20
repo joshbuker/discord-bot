@@ -8,6 +8,7 @@ module DiscordBot
   autoload :Bot, 'discord_bot/bot'
   autoload :CommandRun, 'discord_bot/command_run'
   autoload :ConversationHistory, 'discord_bot/conversation_history'
+  autoload :DiscordUser, 'discord_bot/discord_user'
   autoload :Error, 'discord_bot/errors'
   autoload :Errors, 'discord_bot/errors'
   autoload :Logger, 'discord_bot/logger'

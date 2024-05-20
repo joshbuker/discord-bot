@@ -50,7 +50,11 @@ module DiscordBot
       typing_thread.exit
 
       Logger.log("Reply sent: #{response.message}")
-      user_message.reply_with(response.message)
+      if response.message
+        user_message.reply_with(response.message)
+      else
+        byebug
+      end
     end
 
     def no_action(user_message)

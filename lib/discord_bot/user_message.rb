@@ -4,6 +4,10 @@ module DiscordBot
       @event = event
     end
 
+    def event
+      @event
+    end
+
     def channel
       @event.channel
     end
@@ -14,6 +18,10 @@ module DiscordBot
 
     def user
       @event.user
+    end
+
+    def display_name
+      user.nickname.nil? ? user.global_name : user.nickname
     end
 
     def message
