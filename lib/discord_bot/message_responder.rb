@@ -37,11 +37,17 @@ module DiscordBot
     def reply_to_message(user_message)
       conversation_history = channel_conversation_history(channel_id: user_message.channel.id)
 
-      user_message.channel.start_typing
+      typing_thread = Thread.new do
+        while(true)
+          user_message.channel.start_typing
+          sleep(3) # Wait for 3 seconds before triggering again
+        end
+      end
       response = ModelResponse.new(
         conversation_history: conversation_history,
         user_message: user_message
       )
+      typing_thread.exit
 
       Logger.log("Reply sent: #{response.message}")
       user_message.reply_with(response.message)
