@@ -12,7 +12,7 @@ module DiscordBot
 
         if user_message.message.content.include?('(╯°□°)╯︵ ┻━┻')
           fix_table(user_message)
-        elsif user_message.message.mentions.include?(@bot.user)
+        elsif user_message.message.mentions.include?(@bot.user) || user_message.server.nil?
           reply_to_message(user_message)
         else
           no_action(user_message)
