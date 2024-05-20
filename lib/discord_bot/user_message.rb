@@ -8,6 +8,10 @@ module DiscordBot
       @event.channel
     end
 
+    def server
+      @event.server
+    end
+
     def message
       @event.message
     end

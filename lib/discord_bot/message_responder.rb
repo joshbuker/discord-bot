@@ -37,6 +37,7 @@ module DiscordBot
     def reply_to_message(user_message)
       conversation_history = channel_conversation_history(channel_id: user_message.channel.id)
 
+      user_message.channel.start_typing
       response = ModelResponse.new(
         conversation_history: conversation_history,
         user_message: user_message
