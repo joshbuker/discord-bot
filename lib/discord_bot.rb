@@ -15,6 +15,7 @@ module DiscordBot
   autoload :Logger, 'discord_bot/logger'
   autoload :MessageResponder, 'discord_bot/message_responder'
   autoload :ModelResponse, 'discord_bot/model_response'
+  autoload :Request, 'discord_bot/request'
   autoload :UserMessage, 'discord_bot/user_message'
   autoload :VERSION, 'discord_bot/version'
 

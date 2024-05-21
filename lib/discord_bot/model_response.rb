@@ -1,7 +1,5 @@
 module DiscordBot
   class ModelResponse
-    MODEL_URL = "http://#{DiscordBot::API_HOST}:11434/api/chat"
-
     def initialize(conversation_history:, user_message:)
       @user_message = user_message
 
@@ -9,8 +7,6 @@ module DiscordBot
         role: 'user',
         message: user_message.message.content
       )
-
-      url = MODEL_URL
 
       payload = {
         model: 'llama3',
@@ -24,7 +20,7 @@ module DiscordBot
         accept: :json
       }
 
-      @response = RestClient.post(url, payload, headers)
+      @response = DiscordBot::Request.post('/api/chat', payload, headers)
       @body = JSON.parse(@response.body)
 
       conversation_history.append(

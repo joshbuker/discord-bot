@@ -85,17 +85,15 @@ module DiscordBot
     end
 
     def pull_model(model_name:)
-      url = "http://#{DiscordBot::API_HOST}:11434/api/pull"
       payload = { name: model_name, stream: false }.to_json
       headers = headers = {
         content_type: :json,
         accept: :json
       }
-      RestClient.post(url, payload, headers)
+      DiscordBot::Request.post('/api/pull', payload, headers)
     rescue StandardError => error
-      Logger.log("Model pull failed due to \"#{error.message}\", trying again...")
-      # Infinite recursion on failure? WCGW
-      pull_model(model_name: model_name)
+      Logger.log("Model pull failed due to: \"#{error.message}\", exiting...")
+      shutdown
     end
 
     def register_commands(global_command_registration: false)
