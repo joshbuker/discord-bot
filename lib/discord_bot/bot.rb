@@ -25,6 +25,8 @@ module DiscordBot
         DiscordBot::Commands::Tuturu.new(bot: self)
       ]
 
+      pull_models
+
       if refresh_commands
         Logger.log 'Registering commands...'
         register_commands
@@ -75,6 +77,26 @@ module DiscordBot
     end
 
     private
+
+    def pull_models
+      Logger.log('Pulling Models (this may take a while)...')
+      pull_model(model_name: 'llama3')
+      Logger.log('Models loaded...')
+    end
+
+    def pull_model(model_name:)
+      url = 'http://localhost:11434/api/pull'
+      payload = { name: model_name, stream: false }.to_json
+      headers = headers = {
+        content_type: :json,
+        accept: :json
+      }
+      RestClient.post(url, payload, headers)
+    rescue StandardError => error
+      Logger.log("Model pull failed due to \"#{error.message}\", trying again...")
+      # Infinite recursion on failure? WCGW
+      pull_model(model_name: model_name)
+    end
 
     def register_commands(global_command_registration: false)
       if global_command_registration
