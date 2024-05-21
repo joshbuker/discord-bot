@@ -85,7 +85,7 @@ module DiscordBot
     end
 
     def pull_model(model_name:)
-      url = 'http://localhost:11434/api/pull'
+      url = "http://#{DiscordBot::API_HOST}:11434/api/pull"
       payload = { name: model_name, stream: false }.to_json
       headers = headers = {
         content_type: :json,

@@ -5,6 +5,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 # eventually include LLM responses to questions directed towards it.
 #
 module DiscordBot
+  API_HOST = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
+
   autoload :Bot, 'discord_bot/bot'
   autoload :CommandRun, 'discord_bot/command_run'
   autoload :ConversationHistory, 'discord_bot/conversation_history'
