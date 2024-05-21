@@ -1,6 +1,6 @@
 module DiscordBot
   class ModelResponse
-    MODEL_URL = 'http://llm:11434/api/chat'
+    MODEL_URL = 'http://localhost:11434/api/chat'
 
     def initialize(conversation_history:, user_message:)
       @user_message = user_message
