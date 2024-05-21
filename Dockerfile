@@ -12,8 +12,7 @@ RUN gem install bundler
 RUN bundle config --global frozen 1
 
 # Install Ruby dependencies
-# COPY Gemfile Gemfile.lock ./
-COPY Gemfile .
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 # Copy the application / source into the container
