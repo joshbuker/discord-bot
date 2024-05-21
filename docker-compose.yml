@@ -1,28 +1,23 @@
-version: '3'
-
 services:
   bot:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
+    image: joshbuker/discord-bot:latest
+    build: .
+    depends_on:
+      - llm
     env_file:
-      - ../.env
-    volumes:
-      - ${PWD}:/workspaces/discord-bot:cached
-    command: sleep infinity
+      - .env
     network_mode: service:llm
+    tty: true
 
   llm:
     image: ollama/ollama
-    # Ollama models
     volumes:
       - ollama:/root/.ollama
-    # Allow access to nvidia gpu
     deploy:
       resources:
         reservations:
           devices:
-            - driver: nvidia
+            - driver: nvidiia
               count: 1
               capabilities: [gpu]
 

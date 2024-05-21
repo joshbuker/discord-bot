@@ -15,6 +15,7 @@
     }
   },
 
+  "initializeCommand": "bash .devcontainer/initialize.sh",
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/postcreate.sh"
 }
