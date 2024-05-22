@@ -6,6 +6,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 #
 module DiscordBot
   API_HOST = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
+  LLM_MODEL = ENV['LLM_MODEL'] || 'llama3'
 
   autoload :Bot, 'discord_bot/bot'
   autoload :CommandRun, 'discord_bot/command_run'

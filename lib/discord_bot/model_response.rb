@@ -9,7 +9,7 @@ module DiscordBot
       )
 
       payload = {
-        model: 'llama3',
+        model: DiscordBot::LLM_MODEL,
         stream: false,
         messages: conversation_history.messages,
         prompt: user_message.message.content

@@ -80,7 +80,7 @@ module DiscordBot
 
     def pull_models
       Logger.log('Pulling Models (this may take a while)...')
-      pull_model(model_name: 'llama3')
+      pull_model(model_name: DiscordBot::LLM_MODEL)
       Logger.log('Models loaded...')
     end
 
