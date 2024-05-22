@@ -17,6 +17,13 @@ module DiscordBot
       @history
     end
 
+    def set_system_prompt(content:)
+      @history = [{
+        role: 'system',
+        content: content
+      }]
+    end
+
     def clear
       @history = [system_prompt]
     end

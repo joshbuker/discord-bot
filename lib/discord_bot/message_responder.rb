@@ -10,7 +10,9 @@ module DiscordBot
         user_message = UserMessage.new(event)
         Logger.log("Message received: #{user_message.message.content}")
 
-        if user_message.message.content.include?('(╯°□°)╯︵ ┻━┻')
+        if user_message.message.content.start_with?('!prompt ')
+          set_channel_system_prompt(user_message)
+        elsif user_message.message.content.include?('(╯°□°)╯︵ ┻━┻')
           fix_table(user_message)
         elsif user_message.message.mentions.include?(@bot.user) || user_message.server.nil?
           reply_to_message(user_message)
@@ -32,6 +34,18 @@ module DiscordBot
       end
 
       @channel_conversation_histories[channel_id]
+    end
+
+    def set_channel_system_prompt(user_message)
+      channel_id = user_message.channel.id
+      conversation_history = channel_conversation_history(channel_id: channel_id)
+
+      prompt_content = user_message.message.content.sub('!prompt ', '')
+
+      conversation_history.set_system_prompt(content: prompt_content)
+
+      Logger.log("System prompt for channel #{channel_id} has been reset to:\n#{prompt_content}")
+      user_message.reply_with("System prompt has been reset to:\n\n#{prompt_content}")
     end
 
     def reply_to_message(user_message)
