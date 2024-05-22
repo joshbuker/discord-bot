@@ -11,15 +11,34 @@ module DiscordBot
 
         voip = @bot.voice(channel.id)
         if voip
-          Logger.log 'Playing tuturu.wav'
-          voip.play_file('/workspaces/discord-bot/data/tuturu.wav')
-          Logger.log "Disconnecting from voice channel: #{channel.name}"
-          voip.destroy
+          begin
+            if tuturu_sound_file
+              Logger.log 'Playing tuturu.wav'
+              voip.play_file(tuturu_sound_file) unless tuturu_sound_file.nil?
+            else
+              Logger.log 'Could not find tuturu.wav'
+            end
+          rescue StandardError => error
+            Logger.log("Failed to play sound due to: \"#{error.message}\"")
+          ensure
+            Logger.log "Disconnecting from voice channel: #{channel.name}"
+            voip.destroy
+          end
           command_run.update_response('Tuturu!')
         end
       end
 
       private
+
+      def tuturu_sound_file
+        if File.exist?('/workspaces/discord-bot/data/tuturu.wav')
+          '/workspaces/discord-bot/data/tuturu.wav'
+        elsif File.exist?('/usr/src/app/data/tuturu.wav')
+          '/usr/src/app/data/tuturu.wav'
+        else
+          nil
+        end
+      end
 
       def connect_to_channel(command_run)
         channel = command_run.user.voice_channel
