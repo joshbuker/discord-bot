@@ -1,20 +1,18 @@
 module DiscordBot
   module Commands
     class Exit < Base
-      AUTHORIZED_USERS = [
-        121475289397198848
-      ]
+      class << self
+        def description
+          'Shutdown the bot'
+        end
 
-      def description
-        'Shutdown the bot'
-      end
+        def run(command)
+          return unless command.ran_by_admin?
 
-      def run(command_run)
-        return unless AUTHORIZED_USERS.include?(command_run.user.id)
-
-        command_run.respond_with('Shutting down, see you next time!')
-        Logger.log("Shutting down per request by #{command_run.user.name}")
-        @bot.shutdown
+          command.respond_with 'Shutting down, see you next time!'
+          Logger.info "Shutting down per request by #{command.user.name}"
+          Bot.shutdown
+        end
       end
     end
   end

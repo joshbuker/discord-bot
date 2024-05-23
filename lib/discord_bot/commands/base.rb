@@ -1,36 +1,30 @@
-require 'active_support/inflector'
-
 module DiscordBot
   module Commands
     class Base
-      def initialize(bot:)
-        @bot = bot
-      end
-
-      def register(server_id: nil)
-        if server_id
-          @bot.register_application_command(name, description, server_id: server_id)
-        else
-          @bot.register_application_command(name, description)
+      class << self
+        def register
+          # Logger.info "Registering #{command_name} command"
+          Bot.register_command(command_name, description)
         end
-      end
 
-      def handle
-        @bot.application_command(name) do |event|
-          run(DiscordBot::CommandRun.new(event))
+        def handle
+          # Logger.info "Registering #{command_name} command callback"
+          Bot.command_callback(command_name) do |event|
+            run(DiscordBot::Events::Command.new(event))
+          end
         end
-      end
 
-      def run(command_run)
-        raise NotImplementedError
-      end
+        def run(command)
+          raise NotImplementedError
+        end
 
-      def name
-        self.class.name.demodulize.underscore.to_sym
-      end
+        def command_name
+          self.name.demodulize.underscore.to_sym
+        end
 
-      def description
-        'Description unavailable for this command'
+        def description
+          'Description unavailable for this command'
+        end
       end
     end
   end

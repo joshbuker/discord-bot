@@ -1,36 +1,55 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
+# Provide extensions such as .present?
+require 'active_support/all'
+# Allow for easy debugging with `byebug`
+require 'byebug'
+# Discord API
+require 'discordrb'
+# Allow joining voice channels
+require 'opus-ruby'
+
 ##
 # A simple Discord bot written using Ruby. It provides various commands and will
 # eventually include LLM responses to questions directed towards it.
 #
 module DiscordBot
-  API_HOST = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
-  LLM_MODEL = ENV['LLM_MODEL'] || 'llama3'
-
-  autoload :Bot, 'discord_bot/bot'
-  autoload :CommandRun, 'discord_bot/command_run'
-  autoload :ConversationHistory, 'discord_bot/conversation_history'
-  autoload :Error, 'discord_bot/errors'
-  autoload :Errors, 'discord_bot/errors'
-  autoload :Logger, 'discord_bot/logger'
-  autoload :MessageResponder, 'discord_bot/message_responder'
-  autoload :ModelResponse, 'discord_bot/model_response'
-  autoload :Request, 'discord_bot/request'
-  autoload :UserMessage, 'discord_bot/user_message'
-  autoload :VERSION, 'discord_bot/version'
-
   module Commands
-    autoload :Base, 'discord_bot/commands/base'
-    autoload :Exit, 'discord_bot/commands/exit'
-    autoload :Help, 'discord_bot/commands/help'
+    autoload :Base,   'discord_bot/commands/base'
+    autoload :Exit,   'discord_bot/commands/exit'
+    autoload :Help,   'discord_bot/commands/help'
+    autoload :LLM,    'discord_bot/commands/llm'
     autoload :Source, 'discord_bot/commands/source'
     autoload :Tuturu, 'discord_bot/commands/tuturu'
   end
+
+  module Events
+    autoload :Base,    'discord_bot/events/base'
+    autoload :Command, 'discord_bot/events/command'
+    autoload :Message, 'discord_bot/events/message'
+  end
+
+  module LLM
+    API_PROTOCOL  = ENV['OLLAMA_SERVICE_PROTOCOL'] || "http://"
+    API_HOST      = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
+    API_PORT      = ENV['OLLAMA_SERVICE_PORT'] || '11434'
+    API_URL       = API_PROTOCOL + API_HOST + ':' + API_PORT
+    DEFAULT_MODEL = ENV['LLM_MODEL'] || 'llama3'
+
+    autoload :ApiRequest,   'discord_bot/llm/api_request'
+    autoload :Conversation, 'discord_bot/llm/conversation'
+    autoload :Model,        'discord_bot/llm/model'
+    autoload :Response,     'discord_bot/llm/response'
+  end
+
+  autoload :Bot,    'discord_bot/bot'
+  autoload :Config, 'discord_bot/config'
+  autoload :Error,  'discord_bot/errors'
+  autoload :Errors, 'discord_bot/errors'
+  autoload :Logger, 'discord_bot/logger'
+  autoload :User,   'discord_bot/user'
+  # autoload :VERSION, 'discord_bot/version'
 end
 
-discord_bot = DiscordBot::Bot.new(
-  discord_bot_token: ENV['RUBY_DISCORD_BOT_TOKEN'],
-  refresh_commands: false
-)
-discord_bot.run
+# trap('INT') { DiscordBot::Bot.shutdown }
+DiscordBot::Bot.run
