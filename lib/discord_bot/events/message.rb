@@ -17,6 +17,14 @@ module DiscordBot
         @event.server
       end
 
+      def from
+        if server.present?
+          "#{server.name} \##{channel.name}"
+        else
+          "<@#{user.id}> @#{channel.name} \"#{name}\""
+        end
+      end
+
       def name
         if @event.user.nickname.present?
           @event.user.nickname

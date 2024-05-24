@@ -76,11 +76,13 @@ module DiscordBot
       ]
     end
 
-    def run(skip_motd: false)
+    def run(skip_motd: false, fast_boot: false)
       Logger.info 'Initializing bot'
-      pull_default_model
-      delete_unused_commands
-      register_commands
+      unless fast_boot
+        pull_default_model
+        delete_unused_commands
+        register_commands
+      end
       initialize_callbacks
       motd unless skip_motd
       # at_exit { @bot.stop }
@@ -186,7 +188,7 @@ module DiscordBot
     end
 
     def handle_message(message)
-      Logger.info "Message received (#{message.server.name} \##{message.channel.name}):\n#{message.content}"
+      Logger.info "Message received (#{message.from}):\n#{message.content}"
       if message.content.start_with?('!prompt ')
         set_system_prompt_from_chat(message)
       elsif message.content.include?('(╯°□°)╯︵ ┻━┻')
