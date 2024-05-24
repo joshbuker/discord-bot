@@ -9,6 +9,10 @@ module DiscordBot
         @event.options
       end
 
+      def voice_channel
+        @event.user.voice_channel
+      end
+
       def ran_by_admin?
         Config.admin_users.include?(user)
       end

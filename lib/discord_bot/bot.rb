@@ -22,6 +22,14 @@ module DiscordBot
         instance.user
       end
 
+      def voice(identifier)
+        instance.voice(identifier)
+      end
+
+      def voice_connect(channel)
+        instance.voice_connect(channel)
+      end
+
       def find_user_by_id(id)
         instance.users.find{ |user| user.id == id }
       end
