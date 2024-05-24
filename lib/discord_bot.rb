@@ -34,7 +34,7 @@ module DiscordBot
     API_HOST      = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
     API_PORT      = ENV['OLLAMA_SERVICE_PORT'] || '11434'
     API_URL       = API_PROTOCOL + API_HOST + ':' + API_PORT
-    DEFAULT_MODEL = ENV['LLM_MODEL'] || 'llama3'
+    DEFAULT_MODEL = ENV['DEFAULT_LLM_MODEL'] || 'llama3'
 
     autoload :ApiRequest,   'discord_bot/llm/api_request'
     autoload :Conversation, 'discord_bot/llm/conversation'
