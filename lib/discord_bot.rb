@@ -8,6 +8,10 @@ require 'byebug'
 require 'discordrb'
 # Allow joining voice channels
 require 'opus-ruby'
+# Sanitize YouTube URLs
+require 'shellwords'
+# Validate YouTube URLs
+require 'uri'
 
 # Monkey patches are great and never go wrong
 class Integer
@@ -28,7 +32,7 @@ module DiscordBot
     autoload :Model,        'discord_bot/commands/model'
     autoload :Source,       'discord_bot/commands/source'
     autoload :SystemPrompt, 'discord_bot/commands/system_prompt'
-    autoload :Tuturu,       'discord_bot/commands/tuturu'
+    autoload :Voice,        'discord_bot/commands/voice'
   end
 
   module Events

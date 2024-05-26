@@ -13,7 +13,11 @@ module DiscordBot
         @event.options
       end
 
-      def voice_channel
+      def bot_voice_channel
+        Bot.voice(server_id)&.channel
+      end
+
+      def user_voice_channel
         @event.user.voice_channel
       end
 

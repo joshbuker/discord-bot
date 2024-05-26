@@ -18,6 +18,10 @@ module DiscordBot
       def user_id
         @event.user.id
       end
+
+      def server_id
+        @event.server.id
+      end
     end
   end
 end

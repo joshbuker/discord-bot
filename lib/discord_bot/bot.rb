@@ -84,8 +84,8 @@ module DiscordBot
         DiscordBot::Commands::Help,
         DiscordBot::Commands::Model,
         DiscordBot::Commands::Source,
-        DiscordBot::Commands::Tuturu,
-        DiscordBot::Commands::SystemPrompt
+        DiscordBot::Commands::SystemPrompt,
+        DiscordBot::Commands::Voice
       ]
     end
 
