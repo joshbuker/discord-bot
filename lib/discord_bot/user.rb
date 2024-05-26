@@ -17,14 +17,21 @@ module DiscordBot
     end
 
     def ==(other)
-      if other.is_a?(DiscordBot::User)
-        id == other.id
-      elsif other.is_a?(Discordrb::User)
-        # self == new(other.id)
+      return false if other.nil?
+      if can_compare?(other)
         id == other.id
       else
-        raise ArgumentError, 'Can only compare Discord users'
+        raise ArgumentError,
+          "Cannot compare #{self.class.name} to #{other.class.name}, both must be users"
       end
+    end
+
+    private
+
+    def can_compare?(other)
+      other.is_a?(DiscordBot::User) ||
+      other.is_a?(Discordrb::User) ||
+      other.is_a?(Discordrb::Member)
     end
   end
 end

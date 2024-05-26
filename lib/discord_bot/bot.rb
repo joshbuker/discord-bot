@@ -31,11 +31,11 @@ module DiscordBot
       end
 
       def find_user_by_id(id)
-        instance.users.find{ |user| user.id == id }
+        instance.find_user_by_id(id)
       end
 
-      def register_command(name, description)
-        instance.register_command(name, description)
+      def register_command(name, description, &block)
+        instance.register_command(name, description, &block)
       end
 
       def command_group(command:, group:, &block)
@@ -70,9 +70,10 @@ module DiscordBot
       @commands = [
         DiscordBot::Commands::Exit,
         DiscordBot::Commands::Help,
-        DiscordBot::Commands::LLM,
+        DiscordBot::Commands::Model,
         DiscordBot::Commands::Source,
-        DiscordBot::Commands::Tuturu
+        DiscordBot::Commands::Tuturu,
+        DiscordBot::Commands::SystemPrompt
       ]
     end
 
@@ -116,6 +117,10 @@ module DiscordBot
       @bot
     end
 
+    def find_user_by_id(id)
+      @bot.user(id)
+    end
+
     def user
       @bot.bot_user
     end
@@ -137,21 +142,20 @@ module DiscordBot
     end
 
     def command_group(command:, group:, &block)
-      @bot.application_command(command, &block).group(group, &block)
+      @bot.application_command(command).group(group, &block)
     end
 
-    def register_command(name, description)
-      @bot.register_application_command(name, description)
+    def register_command(name, description, &block)
+      @bot.register_application_command(name, description, &block)
     end
 
     def shutdown
       Logger.info 'Shutting down'
-      @bot.stop # FIXME: Redundant?
-      exit
-      abort('Having trouble committing die, trying harder')
+      @bot.stop
     end
 
     def reset_system_prompt(channel_id:)
+      Logger.info("System prompt for channel #{channel_id} has been reset to default")
       conversation(channel_id).reset_system_prompt
     end
 

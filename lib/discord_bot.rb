@@ -15,12 +15,13 @@ require 'opus-ruby'
 #
 module DiscordBot
   module Commands
-    autoload :Base,   'discord_bot/commands/base'
-    autoload :Exit,   'discord_bot/commands/exit'
-    autoload :Help,   'discord_bot/commands/help'
-    autoload :LLM,    'discord_bot/commands/llm'
-    autoload :Source, 'discord_bot/commands/source'
-    autoload :Tuturu, 'discord_bot/commands/tuturu'
+    autoload :Base,         'discord_bot/commands/base'
+    autoload :Exit,         'discord_bot/commands/exit'
+    autoload :Help,         'discord_bot/commands/help'
+    autoload :Model,        'discord_bot/commands/model'
+    autoload :Source,       'discord_bot/commands/source'
+    autoload :SystemPrompt, 'discord_bot/commands/system_prompt'
+    autoload :Tuturu,       'discord_bot/commands/tuturu'
   end
 
   module Events

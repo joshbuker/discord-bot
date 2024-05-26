@@ -1,13 +1,11 @@
 module DiscordBot
   class Config
     class << self
-      def instance
-        @instance ||= new(DEFAULTS)
-      end
-
+      # TODO: Migrate to Slash command permissions?
       def admin_users
         [
           DiscordBot::User.new(id: 121475289397198848)
+          # 121475289397198848
         ]
       end
 

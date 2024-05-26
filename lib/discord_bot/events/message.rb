@@ -9,10 +9,6 @@ module DiscordBot
         @event.channel
       end
 
-      def channel_id
-        @event.channel.id
-      end
-
       def server
         @event.server
       end

@@ -6,6 +6,10 @@ module DiscordBot
       def initialize(event)
         @event = event
       end
+
+      def channel_id
+        @event.channel.id
+      end
     end
   end
 end
