@@ -193,8 +193,6 @@ module DiscordBot
       @channel_models[channel_id] = model
     end
 
-    private
-
     def conversation(channel_id)
       @channel_conversations[channel_id] ||= DiscordBot::LLM::Conversation.new
     end
@@ -202,6 +200,8 @@ module DiscordBot
     def model(channel_id)
       @channel_models[channel_id] ||= DiscordBot::LLM::Model.new
     end
+
+    private
 
     def pull_default_model
       Logger.info 'Pulling default LLM model'
