@@ -46,6 +46,14 @@ module DiscordBot
         instance.application_command(name, &block)
       end
 
+      def reset_model(channel_id:)
+        instance.reset_model(channel_id: channel_id)
+      end
+
+      def set_model(channel_id:, model:)
+        instance.set_model(channel_id: channel_id, model: model)
+      end
+
       def reset_system_prompt(channel_id:)
         instance.reset_system_prompt(channel_id: channel_id)
       end
@@ -164,6 +172,23 @@ module DiscordBot
       conversation(channel_id).set_system_prompt(system_prompt: system_prompt)
     end
 
+    def reset_model(channel_id:)
+      set_model(channel_id: channel_id, model: DiscordBot::LLM::Model.new)
+    end
+
+    def set_model(channel_id:, model:)
+      unless model.is_a?(DiscordBot::LLM::Model)
+        raise ArgumentError,
+          "Tried to set model using invalid class type #{model.class.name}"
+      end
+
+      unless model.available?
+        raise ArgumentError, "Tried to set model, but it's unavailable"
+      end
+
+      @channel_models[channel_id] = model
+    end
+
     private
 
     def conversation(channel_id)
@@ -177,7 +202,7 @@ module DiscordBot
     def pull_default_model
       Logger.info 'Pulling default LLM model'
       begin
-        DiscordBot::LLM::Model.pull(model_name: DiscordBot::LLM::DEFAULT_MODEL)
+        DiscordBot::LLM::Model.new(model_name: DiscordBot::LLM::DEFAULT_MODEL).pull
       rescue DiscordBot::Errors::FailedToPullModel => error
         Logger.fatal error.message
         shutdown

@@ -10,6 +10,14 @@ module DiscordBot
       def channel_id
         @event.channel.id
       end
+
+      def channel_name
+        @event.channel.name
+      end
+
+      def user_id
+        @event.user.id
+      end
     end
   end
 end

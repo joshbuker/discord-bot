@@ -15,6 +15,7 @@ module DiscordBot
             command.subcommand(:set, 'Set the current model') do |subcommand|
               subcommand.string(:model, 'What model to use', required: true)
             end
+            command.subcommand(:list, 'List the available models')
           end
         end
 
@@ -34,6 +35,10 @@ module DiscordBot
           Bot.command_callback(command_name).subcommand(:set) do |event|
             set_model(DiscordBot::Events::Command.new(event))
           end
+
+          Bot.command_callback(command_name).subcommand(:list) do |event|
+            list_available_models(DiscordBot::Events::Command.new(event))
+          end
         end
 
         def run(command)
@@ -41,24 +46,52 @@ module DiscordBot
         end
 
         def reset_model(command)
-          # Bot.reset_model(channel_id: command.channel_id)
-          command.respond_with('Pending implementation')
+          Logger.info "#{command.user_id} has reset the LLM model to default for #{command.channel_name}"
+          Bot.reset_model(channel_id: command.channel_id)
+          command.respond_with('Reset the LLM model to default')
         end
 
         def pull_model(command)
           unless command.ran_by_admin?
-            raise DiscordBot::Errors::PermissionDenied,
-              "#{command.user.name} tried running the pull model command without permission"
+            Logger.info "#{command.user.name} tried running the pull model command without permission"
+            command.respond_with('Due to the large size of models, this command is restricted to admins')
+            return
           end
           requested_model = command.options['model']
-          Logger.info "#{command.user.name} has requested the LLM model #{requested_model}"
-          command.respond_with('Pending implementation')
+          Logger.info "#{command.user_id} has requested the LLM model #{requested_model}"
+          command.respond_with("Pulling LLM model \"#{requested_model}\"...")
+          model = DiscordBot::LLM::Model.new(model_name: requested_model)
+          if model.available?
+            command.update_response("\"#{requested_model}\" is already available")
+          else
+            begin
+              model.pull
+              command.update_response("Pulled LLM model \"#{requested_model}\"")
+            rescue DiscordBot::Errors::FailedToPullModel
+              command.update_response("Failed to pull LLM model \"#{requested_model}\"")
+            end
+          end
         rescue DiscordBot::Errors::PermissionDenied => error
           Logger.warn error.message
         end
 
         def set_model(command)
-          command.respond_with('Pending implementation')
+          requested_model = command.options['model']
+          model = DiscordBot::LLM::Model.new(model_name: requested_model)
+          if model.available?
+            Logger.info "#{command.user_id} has set the LLM model to #{requested_model} for \##{command.channel_name}"
+            Bot.set_model(channel_id: command.channel_id, model: model)
+            command.respond_with("Set LLM model to \"#{requested_model}\"")
+          else
+            command.respond_with("That model is currently unavailable. Try running `/model pull #{requested_model}` first")
+          end
+        end
+
+        def list_available_models(command)
+          models = DiscordBot::LLM::Model.available_models
+          # TODO: Also show file size, parameter size, and quantization level
+          formatted_list = models.map{ |model| "- `#{model.name}`" }.join("\n")
+          command.respond_with("The currently available models are:\n#{formatted_list}")
         end
       end
     end

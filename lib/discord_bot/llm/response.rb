@@ -9,15 +9,12 @@ module DiscordBot
           message: adjusted_user_message(user_message)
         )
 
-        payload = {
-          messages: conversation_history.messages,
-          model: model.name,
-          stream: false
-        }.to_json
-
         Logger.info 'Requesting LLM Response'
-        @response = DiscordBot::LLM::ApiRequest.post('/api/chat', payload)
-        @body = JSON.parse(@response.body)
+        response = DiscordBot::LLM::ApiRequest.chat(
+          messages: conversation_history.messages,
+          model_name: model.name
+        )
+        @body = JSON.parse(response.body)
 
         conversation_history.append(
           role: 'assistant',
