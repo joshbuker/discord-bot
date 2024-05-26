@@ -9,6 +9,13 @@ require 'discordrb'
 # Allow joining voice channels
 require 'opus-ruby'
 
+# Monkey patches are great and never go wrong
+class Integer
+  def to_human_filesize
+    ActiveSupport::NumberHelper.number_to_human_size(self)
+  end
+end
+
 ##
 # A simple Discord bot written using Ruby. It provides various commands and will
 # eventually include LLM responses to questions directed towards it.

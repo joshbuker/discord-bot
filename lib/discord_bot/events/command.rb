@@ -5,6 +5,10 @@ module DiscordBot
         @event.user
       end
 
+      def whois
+        "@#{user.name}"
+      end
+
       def options
         @event.options
       end

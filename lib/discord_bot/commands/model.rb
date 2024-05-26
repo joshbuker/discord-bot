@@ -46,7 +46,7 @@ module DiscordBot
         end
 
         def reset_model(command)
-          Logger.info "#{command.user_id} has reset the LLM model to default for #{command.channel_name}"
+          Logger.info "#{command.whois} has reset the LLM model to default for #{command.channel_name}"
           Bot.reset_model(channel_id: command.channel_id)
           command.respond_with('Reset the LLM model to default')
         end
@@ -58,7 +58,7 @@ module DiscordBot
             return
           end
           requested_model = command.options['model']
-          Logger.info "#{command.user_id} has requested the LLM model #{requested_model}"
+          Logger.info "#{command.whois} has requested the LLM model #{requested_model}"
           command.respond_with("Pulling LLM model \"#{requested_model}\"...")
           model = DiscordBot::LLM::Model.new(model_name: requested_model)
           if model.available?
@@ -79,7 +79,7 @@ module DiscordBot
           requested_model = command.options['model']
           model = DiscordBot::LLM::Model.new(model_name: requested_model)
           if model.available?
-            Logger.info "#{command.user_id} has set the LLM model to #{requested_model} for \##{command.channel_name}"
+            Logger.info "#{command.whois} has set the LLM model to #{requested_model} for \##{command.channel_name}"
             Bot.set_model(channel_id: command.channel_id, model: model)
             command.respond_with("Set LLM model to \"#{requested_model}\"")
           else
@@ -88,9 +88,12 @@ module DiscordBot
         end
 
         def list_available_models(command)
+          Logger.info "#{command.whois} requested a list of the available models"
           models = DiscordBot::LLM::Model.available_models
           # TODO: Also show file size, parameter size, and quantization level
-          formatted_list = models.map{ |model| "- `#{model.name}`" }.join("\n")
+          formatted_list = models.map do |model|
+            "- Name: `#{model.name}` - File size: `#{model.file_size}` - Parameter size: `#{model.parameter_size}`"
+          end.join("\n")
           command.respond_with("The currently available models are:\n#{formatted_list}")
         end
       end
