@@ -16,6 +16,7 @@ module DiscordBot
               subcommand.string(:model, 'What model to use', required: true)
             end
             command.subcommand(:list, 'List the available models')
+            command.subcommand(:current, 'Show the currently loaded model')
           end
         end
 
@@ -39,6 +40,10 @@ module DiscordBot
           Bot.command_callback(command_name).subcommand(:list) do |event|
             list_available_models(DiscordBot::Events::Command.new(event))
           end
+
+          Bot.command_callback(command_name).subcommand(:current) do |event|
+            print_current_model(DiscordBot::Events::Command.new(event))
+          end
         end
 
         def run(command)
@@ -48,7 +53,8 @@ module DiscordBot
         def reset_model(command)
           Logger.info "#{command.whois} has reset the LLM model to default for #{command.channel_name}"
           Bot.reset_model(channel_id: command.channel_id)
-          command.respond_with('Reset the LLM model to default')
+          default_model = DiscordBot::LLM::Model.new
+          command.respond_with("Reset the LLM model to default:\n#{default_model.about}")
         end
 
         def pull_model(command)
@@ -81,20 +87,24 @@ module DiscordBot
           if model.available?
             Logger.info "#{command.whois} has set the LLM model to #{requested_model} for \##{command.channel_name}"
             Bot.set_model(channel_id: command.channel_id, model: model)
-            command.respond_with("Set LLM model to \"#{requested_model}\"")
+            command.respond_with("Set LLM model to:\n\"#{model.about}\"")
           else
             command.respond_with("That model is currently unavailable. Try running `/model pull #{requested_model}` first")
           end
+        end
+
+        def print_current_model(command)
+          Logger.info "#{command.whois} inspected the current model"
+          model = Bot.current_model(channel_id: command.channel_id)
+          command.respond_with("The currently loaded model for \##{command.channel_name} is:\n#{model.about}")
         end
 
         def list_available_models(command)
           Logger.info "#{command.whois} requested a list of the available models"
           models = DiscordBot::LLM::Model.available_models
           # TODO: Also show file size, parameter size, and quantization level
-          formatted_list = models.map do |model|
-            "- Name: `#{model.name}` - File size: `#{model.file_size}` - Parameter size: `#{model.parameter_size}`"
-          end.join("\n")
-          command.respond_with("The currently available models are:\n#{formatted_list}")
+          formatted_list = models.map{ |model| "- #{model.about}" }.join("\n")
+          command.respond_with("The currently available models are:\n#{formatted_list}\n\nMore can be found at: https://ollama.com/library")
         end
       end
     end

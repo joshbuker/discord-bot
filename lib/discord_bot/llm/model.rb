@@ -31,6 +31,10 @@ module DiscordBot
         false
       end
 
+      def about
+        "Name: `#{name}` - File size: `#{file_size}` - Parameter size: `#{parameter_size}` - Quantization level: `#{quantization_level}`"
+      end
+
       # TODO: Add automatic retry with backoff
       def pull
         return if available?
