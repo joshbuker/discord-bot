@@ -5,7 +5,10 @@ module DiscordBot
       def admin_users
         [
           DiscordBot::User.new(id: 121475289397198848)
-          # 121475289397198848
+          DiscordBot::User.new(id: 227141869962919936)
+          DiscordBot::User.new(id: 381899834564804622)
+          DiscordBot::User.new(id: 478093835172446209)
+          DiscordBot::User.new(id: 722652181894791238)
         ]
       end
 
