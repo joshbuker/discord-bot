@@ -74,7 +74,16 @@ module DiscordBot
         end
 
         def stop_playing(command)
-          command.respond_with 'Pending implementation'
+          voice_channel = command.bot_voice_channel
+          if connected_to_voice?(voice_channel)
+            voip = Bot.voice(voice_channel.id)
+            Logger.info "Stopping audio"
+            command.respond_with("Stopping playback...")
+            voip.stop_playing
+            command.update_response("Playback stopped.")
+          else
+            command.respond_with("Nothing to do, not connected to voice currently")
+          end
         end
 
         # Yo dawg, I heard you like vulnerabilities
