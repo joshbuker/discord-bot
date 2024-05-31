@@ -26,13 +26,17 @@ end
 #
 module DiscordBot
   module Commands
-    autoload :Base,         'discord_bot/commands/base'
-    autoload :Exit,         'discord_bot/commands/exit'
-    autoload :Help,         'discord_bot/commands/help'
-    autoload :Model,        'discord_bot/commands/model'
-    autoload :Source,       'discord_bot/commands/source'
-    autoload :SystemPrompt, 'discord_bot/commands/system_prompt'
-    autoload :Voice,        'discord_bot/commands/voice'
+    autoload :Base,           'discord_bot/commands/base'
+    autoload :Exit,           'discord_bot/commands/exit'
+    autoload :HelloFriend,    'discord_bot/commands/hello_friend'
+    autoload :Help,           'discord_bot/commands/help'
+    autoload :MessageCommand, 'discord_bot/commands/message_command'
+    autoload :Model,          'discord_bot/commands/model'
+    autoload :ReplyToMessage, 'discord_bot/commands/reply_to_message'
+    autoload :Source,         'discord_bot/commands/source'
+    autoload :SystemPrompt,   'discord_bot/commands/system_prompt'
+    autoload :UserCommand,    'discord_bot/commands/user_command'
+    autoload :Voice,          'discord_bot/commands/voice'
   end
 
   module Events

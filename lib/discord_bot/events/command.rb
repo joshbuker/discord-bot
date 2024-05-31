@@ -21,6 +21,14 @@ module DiscordBot
         @event.user.voice_channel
       end
 
+      def target_message
+        DiscordBot::Events::Message.new(@event.target)
+      end
+
+      def target_user
+        DiscordBot::User.new(user: @event.target)
+      end
+
       def ran_by_admin?
         Config.admin_users.include?(user)
       end

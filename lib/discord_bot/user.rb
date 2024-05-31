@@ -12,8 +12,34 @@ module DiscordBot
       end
     end
 
+    def whois
+      "@#{@user.name}"
+    end
+
+    def user
+      @user
+    end
+
+    def mention
+      @user.mention
+    end
+
+    def name
+      if @user.nickname.present?
+        @user.nickname
+      elsif @user.global_name.present?
+        @user.global_name
+      else
+        @user.name
+      end
+    end
+
     def id
       @user.id
+    end
+
+    def direct_message(message)
+      @user.pm(message)
     end
 
     def ==(other)

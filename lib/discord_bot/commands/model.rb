@@ -59,7 +59,7 @@ module DiscordBot
 
         def pull_model(command)
           unless command.ran_by_admin?
-            Logger.info "#{command.user.name} tried running the pull model command without permission"
+            Logger.info "#{command.whois} tried running the pull model command without permission"
             command.respond_with('Due to the large size of models, this command is restricted to admins')
             return
           end

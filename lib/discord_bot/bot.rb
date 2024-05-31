@@ -34,8 +34,20 @@ module DiscordBot
         instance.find_user_by_id(id)
       end
 
+      def generate_llm_response(channel_id:, message:)
+        instance.generate_llm_response(channel_id: channel_id, message: message)
+      end
+
       def register_command(name, description, &block)
         instance.register_command(name, description, &block)
+      end
+
+      def register_user_command(name, &block)
+        instance.register_user_command(name, &block)
+      end
+
+      def register_message_command(name, &block)
+        instance.register_message_command(name, &block)
       end
 
       def command_group(command:, group:, &block)
@@ -81,8 +93,10 @@ module DiscordBot
       @channel_models = {}
       @commands = [
         DiscordBot::Commands::Exit,
+        DiscordBot::Commands::HelloFriend,
         DiscordBot::Commands::Help,
         DiscordBot::Commands::Model,
+        DiscordBot::Commands::ReplyToMessage,
         DiscordBot::Commands::Source,
         DiscordBot::Commands::SystemPrompt,
         DiscordBot::Commands::Voice
@@ -161,6 +175,14 @@ module DiscordBot
       @bot.register_application_command(name, description, &block)
     end
 
+    def register_user_command(name, &block)
+      @bot.register_application_command(name, nil, type: :user, &block)
+    end
+
+    def register_message_command(name, &block)
+      @bot.register_application_command(name, nil, type: :message, &block)
+    end
+
     def shutdown
       Logger.info 'Shutting down'
       @bot.stop
@@ -199,6 +221,14 @@ module DiscordBot
 
     def model(channel_id)
       @channel_models[channel_id] ||= DiscordBot::LLM::Model.new
+    end
+
+    def generate_llm_response(channel_id:, message:)
+      DiscordBot::LLM::Response.new(
+        conversation_history: conversation(channel_id),
+        user_message: message,
+        model: model(channel_id)
+      )
     end
 
     private
@@ -249,11 +279,7 @@ module DiscordBot
     def reply_to_message(message)
       channel_id = message.channel_id
       typing_thread = message.start_typing_thread
-      response = DiscordBot::LLM::Response.new(
-        conversation_history: conversation(channel_id),
-        user_message: message,
-        model: model(channel_id)
-      )
+      response = generate_llm_response(channel_id: channel_id, message: message)
       typing_thread.exit
       Logger.info "Reply sent (#{response.model.name}):\n#{response.message}"
       message.reply_with(response.message)
@@ -277,6 +303,7 @@ module DiscordBot
     def commands_to_delete(existing_commands)
       commands_to_keep = commands.map(&:command_name)
       existing_commands.reject do |command|
+        commands_to_keep.include?(command.name) ||
         commands_to_keep.include?(command.name.to_sym)
       end
     end
