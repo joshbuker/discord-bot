@@ -25,8 +25,8 @@ module DiscordBot
         Config.admin_users.include?(user)
       end
 
-      def respond_with(response)
-        @event.respond(content: response)
+      def respond_with(response, only_to_user: true)
+        @event.respond(content: response, ephemeral: only_to_user)
       end
 
       def update_response(response)

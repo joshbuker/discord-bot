@@ -30,10 +30,12 @@ module DiscordBot
           role: 'system',
           content: system_prompt
         }]
+        return system_prompt
       end
 
       def reset_system_prompt
         @conversation = [default_system_prompt]
+        return default_system_prompt[:content]
       end
 
       private

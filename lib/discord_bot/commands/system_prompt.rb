@@ -37,8 +37,8 @@ module DiscordBot
         end
 
         def reset_system_prompt(command)
-          Bot.reset_system_prompt(channel_id: command.channel_id)
-          command.respond_with('System prompt reset to default')
+          default_prompt = Bot.reset_system_prompt(channel_id: command.channel_id)
+          command.respond_with("System prompt reset to default:\n\n#{default_prompt}", only_to_user: false)
         end
 
         def set_system_prompt(command)
@@ -47,7 +47,7 @@ module DiscordBot
             channel_id: command.channel_id,
             system_prompt: system_prompt
           )
-          command.respond_with("System prompt has been reset to:\n\n#{system_prompt}")
+          command.respond_with("System prompt has been reset to:\n\n#{system_prompt}", only_to_user: false)
         end
       end
     end

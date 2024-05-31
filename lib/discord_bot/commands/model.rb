@@ -54,7 +54,7 @@ module DiscordBot
           Logger.info "#{command.whois} has reset the LLM model to default for #{command.channel_name}"
           Bot.reset_model(channel_id: command.channel_id)
           default_model = DiscordBot::LLM::Model.new
-          command.respond_with("Reset the LLM model to default:\n#{default_model.about}")
+          command.respond_with("Reset the LLM model to default:\n#{default_model.about}", only_to_user: false)
         end
 
         def pull_model(command)
@@ -87,7 +87,7 @@ module DiscordBot
           if model.available?
             Logger.info "#{command.whois} has set the LLM model to #{requested_model} for \##{command.channel_name}"
             Bot.set_model(channel_id: command.channel_id, model: model)
-            command.respond_with("Set LLM model to:\n\"#{model.about}\"")
+            command.respond_with("Set LLM model to:\n\"#{model.about}\"", only_to_user: false)
           else
             command.respond_with("That model is currently unavailable. Try running `/model pull #{requested_model}` first")
           end
