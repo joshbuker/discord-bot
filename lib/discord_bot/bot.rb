@@ -104,6 +104,7 @@ module DiscordBot
         DiscordBot::Commands::Message::ReplyToMessage,
         DiscordBot::Commands::Slash::Exit,
         DiscordBot::Commands::Slash::Help,
+        DiscordBot::Commands::Slash::Image,
         DiscordBot::Commands::Slash::Model,
         DiscordBot::Commands::Slash::Source,
         DiscordBot::Commands::Slash::SystemPrompt,
@@ -123,9 +124,9 @@ module DiscordBot
       motd unless skip_motd
       # at_exit { @bot.stop }
       Logger.info 'Starting bot'
-      @bot.run(true)
+      @bot.run(true) # Run bot async so we can log that the bot started
       Logger.info 'Bot running'
-      @bot.join
+      @bot.join # Reattach to the bot thread now that we've logged the startup
     end
 
     def delete_unused_commands

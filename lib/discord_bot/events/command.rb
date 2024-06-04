@@ -43,6 +43,21 @@ module DiscordBot
       def update_response(response)
         @event.edit_response(content: response)
       end
+
+      def update_with_base64_image(image, caption)
+        File.open('/tmp/attachment.png', 'wb') do |f|
+          f.write(Base64.decode64(image))
+        end
+        file = File.open('/tmp/attachment.png', 'r')
+        @event.channel.send_file(file, caption: caption)
+        # @event.edit_response(content: 'Testing 123') do |builder, view|
+        #   builder.file = file
+        # end
+        # embed = Discordrb::Webhooks::EmbedImage.new(
+        #   url: image
+        # )
+        # @event.edit_response(content: 'testing',embeds: [embed])
+      end
     end
   end
 end

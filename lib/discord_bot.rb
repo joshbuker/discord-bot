@@ -51,6 +51,7 @@ module DiscordBot
       autoload :Base,         'discord_bot/commands/slash/base'
       autoload :Exit,         'discord_bot/commands/slash/exit'
       autoload :Help,         'discord_bot/commands/slash/help'
+      autoload :Image,        'discord_bot/commands/slash/image'
       autoload :Model,        'discord_bot/commands/slash/model'
       autoload :Source,       'discord_bot/commands/slash/source'
       autoload :SystemPrompt, 'discord_bot/commands/slash/system_prompt'
@@ -91,6 +92,16 @@ module DiscordBot
     autoload :Conversation, 'discord_bot/llm/conversation'
     autoload :Model,        'discord_bot/llm/model'
     autoload :Response,     'discord_bot/llm/response'
+  end
+
+  module StableDiffusion
+    API_PROTOCOL  = ENV['STABLE_DIFFUSION_SERVICE_PROTOCOL'] || 'http://'
+    API_HOST      = ENV['STABLE_DIFFUSION_SERVICE_NAME'] || 'localhost'
+    API_PORT      = ENV['STABLE_DIFFUSION_SERVICE_PORT'] || '7860'
+    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+
+    autoload :ApiRequest, 'discord_bot/stable_diffusion/api_request'
+    autoload :Image,      'discord_bot/stable_diffusion/image'
   end
 
   autoload :Bot,    'discord_bot/bot'
