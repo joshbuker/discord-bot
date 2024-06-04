@@ -1,0 +1,58 @@
+name: Test Suite
+
+# Run against all commits and pull requests.
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+  pull_request:
+
+jobs:
+  bundle-audit:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3
+        bundler-cache: true
+    - name: Run bundle audit
+      run: bundle exec rake bundle:audit
+
+  rspec:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake spec
+
+  rubocop:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3
+        bundler-cache: true
+    - name: Run rubocop
+      run: bundle exec rake rubocop
+
+  finish:
+    runs-on: ubuntu-latest
+    needs: [ bundle-audit, rspec, rubocop ]
+    steps:
+      - name: Wait for status checks
+        run: echo "All Green!"
