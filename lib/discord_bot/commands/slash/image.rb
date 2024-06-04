@@ -12,7 +12,11 @@ module DiscordBot
               command.subcommand(:generate, 'Generate an image using Stable Diffusion') do |options|
                 options.string(:prompt, 'The prompt for the image', required: true)
                 options.string(:negative_prompt, 'The negative prompt for the image')
-                # options.attachment(:image, 'Base image to work from for image to image')
+                options.integer(:steps, 'How many iterations to pass over the image (default: 20)')
+                options.integer(:cfg_scale, 'How closely to follow the prompt instructions (default: 7)')
+                options.integer(:width, 'The width in pixels of the image (default: 512)')
+                options.integer(:height, 'The height in pixels of the image (default: 512)')
+                options.attachment(:base_image, 'Base image to work from for image to image')
               end
             end
           end
@@ -28,17 +32,21 @@ module DiscordBot
           end
 
           def generate_image(command)
-            prompt = command.options['prompt']
-            negative_prompt = command.options['negative_prompt']
-            Logger.info 'Generating image'
+            Logger.info("Image requested by #{command.whois}")
             command.respond_with('Generating image')
+            image_options = DiscordBot::StableDiffusion::ImageOptions.new(
+              command.options
+            )
             image = DiscordBot::StableDiffusion::Image.new(
-              prompt: prompt,
-              negative_prompt: negative_prompt
+              image_options: image_options
             )
             Logger.info 'Sending image'
-            command.update_with_base64_image(image.content, image.about)
-            Logger.info 'Sent'
+            caption =
+              "Generated an image requested by #{command.user.mention}:\n#{image.about}"
+            command.send_image(image: image.content, caption: caption)
+            Logger.info(
+              "Sent image with the following options:\n#{image.about}"
+            )
           rescue StandardError => e
             byebug
           end

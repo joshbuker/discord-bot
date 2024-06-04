@@ -1,47 +1,45 @@
 module DiscordBot
   module StableDiffusion
     class Image
-      def initialize(prompt:, negative_prompt: nil)
-        @prompt = prompt
-        @negative_prompt = negative_prompt.present? ? negative_prompt : ''
-        @width = '256'
-        @height = '256'
-        @cfg_scale = '7'
-        @steps = '20'
-        response = DiscordBot::StableDiffusion::ApiRequest.text_to_image(
-          prompt: @prompt,
-          negative_prompt: @negative_prompt,
-          width: @width,
-          height: @height,
-          cfg_scale: @cfg_scale,
-          steps: @steps
-        )
+      def initialize(image_options:)
+        @options = image_options
+        if image_options.base_image.present?
+          response = DiscordBot::StableDiffusion::ApiRequest.image_to_image(
+            image_options: image_options
+          )
+        else
+          response = DiscordBot::StableDiffusion::ApiRequest.text_to_image(
+            image_options: image_options
+          )
+        end
         @body = JSON.parse(response.body)
       end
 
-      attr_reader :body, :prompt, :negative_prompt, :width, :height, :cfg_scale, :steps
+      attr_reader :body, :options
 
       def about
-        <<~ABOUT
-          **Prompt:**
-          ```
-          #{prompt}
-          ```
-          **Negative Prompt:**#{negative_prompt_details}
-          **CFG Scale:** `#{cfg_scale}` | **Steps:** `#{steps}` | **Size:** `#{width}x#{height}`
-        ABOUT
+          "**Prompt:**\n```\n#{options.prompt}\n```\n" \
+          "**Negative Prompt:**#{negative_prompt_details}\n" \
+          "**CFG Scale:** `#{options.cfg_scale}` | " \
+          "**Steps:** `#{options.steps}` | " \
+          "**Size:** `#{options.width}x#{options.height}`"
       end
 
       def content
         # "data:image/jpg;base64,#{@body['images'].first}"
-        @body['images'].first
+        base64_content = @body['images'].first
+        if base64_content.present?
+          StringIO.new(Base64.decode64(base64_content))
+        else
+          nil
+        end
       end
 
       private
 
       def negative_prompt_details
-        if negative_prompt.present?
-          "\n```\n#{negative_prompt}\n```"
+        if options.negative_prompt.present?
+          "\n```\n#{options.negative_prompt}\n```"
         else
           ' _N/A_'
         end

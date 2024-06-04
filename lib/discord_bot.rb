@@ -12,6 +12,8 @@ require 'opus-ruby'
 require 'shellwords'
 # Validate YouTube URLs
 require 'uri'
+# Allow processing Base64 images as files without needing to write to disk
+require 'stringio'
 
 # Monkey patches are great and never go wrong
 class Integer
@@ -100,8 +102,9 @@ module DiscordBot
     API_PORT      = ENV['STABLE_DIFFUSION_SERVICE_PORT'] || '7860'
     API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
 
-    autoload :ApiRequest, 'discord_bot/stable_diffusion/api_request'
-    autoload :Image,      'discord_bot/stable_diffusion/image'
+    autoload :ApiRequest,   'discord_bot/stable_diffusion/api_request'
+    autoload :ImageOptions, 'discord_bot/stable_diffusion/image_options'
+    autoload :Image,        'discord_bot/stable_diffusion/image'
   end
 
   autoload :Bot,    'discord_bot/bot'
