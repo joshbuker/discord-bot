@@ -101,14 +101,14 @@ module DiscordBot
       @channel_conversations = {}
       @channel_models = {}
       @commands = [
-        DiscordBot::Commands::Exit,
-        DiscordBot::Commands::HelloFriend,
-        DiscordBot::Commands::Help,
-        DiscordBot::Commands::Model,
-        DiscordBot::Commands::ReplyToMessage,
-        DiscordBot::Commands::Source,
-        DiscordBot::Commands::SystemPrompt,
-        DiscordBot::Commands::Voice
+        DiscordBot::Commands::Message::ReplyToMessage,
+        DiscordBot::Commands::Slash::Exit,
+        DiscordBot::Commands::Slash::Help,
+        DiscordBot::Commands::Slash::Model,
+        DiscordBot::Commands::Slash::Source,
+        DiscordBot::Commands::Slash::SystemPrompt,
+        DiscordBot::Commands::Slash::Voice,
+        DiscordBot::Commands::User::HelloFriend
       ]
     end
 

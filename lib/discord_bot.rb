@@ -26,21 +26,46 @@ end
 #
 module DiscordBot
   ##
-  # Slash Commands, as well as User and Message commands for interacting with
-  # the bot beyond just LLM chat responses.
+  # Commands that can be ran manually, as opposed to the automatic responses to
+  # messages.
   #
   module Commands
-    autoload :Base,           'discord_bot/commands/base'
-    autoload :Exit,           'discord_bot/commands/exit'
-    autoload :HelloFriend,    'discord_bot/commands/hello_friend'
-    autoload :Help,           'discord_bot/commands/help'
-    autoload :MessageCommand, 'discord_bot/commands/message_command'
-    autoload :Model,          'discord_bot/commands/model'
-    autoload :ReplyToMessage, 'discord_bot/commands/reply_to_message'
-    autoload :Source,         'discord_bot/commands/source'
-    autoload :SystemPrompt,   'discord_bot/commands/system_prompt'
-    autoload :UserCommand,    'discord_bot/commands/user_command'
-    autoload :Voice,          'discord_bot/commands/voice'
+    ##
+    # Message commands that take no parameters, but include the message that the
+    # command was ran against.
+    #
+    module Message
+      autoload :Base,           'discord_bot/commands/message/base'
+      autoload :ReplyToMessage, 'discord_bot/commands/message/reply_to_message'
+    end
+
+    ##
+    # Slash commands that can be ran from chat, and can take parameters/options.
+    #
+    # Examples include:
+    # - `/source`
+    # - `/model list`
+    # - `/voice youtube <url>`
+    #
+    module Slash
+      autoload :Base,         'discord_bot/commands/slash/base'
+      autoload :Exit,         'discord_bot/commands/slash/exit'
+      autoload :Help,         'discord_bot/commands/slash/help'
+      autoload :Model,        'discord_bot/commands/slash/model'
+      autoload :Source,       'discord_bot/commands/slash/source'
+      autoload :SystemPrompt, 'discord_bot/commands/slash/system_prompt'
+      autoload :UserCommand,  'discord_bot/commands/slash/user_command'
+      autoload :Voice,        'discord_bot/commands/slash/voice'
+    end
+
+    ##
+    # User commands that take no parameters, but include the user that the
+    # command was ran against.
+    #
+    module User
+      autoload :Base,        'discord_bot/commands/user/base'
+      autoload :HelloFriend, 'discord_bot/commands/user/hello_friend'
+    end
   end
 
   ##
