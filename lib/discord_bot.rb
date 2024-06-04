@@ -31,6 +31,7 @@ module DiscordBot
     autoload :HelloFriend,    'discord_bot/commands/hello_friend'
     autoload :Help,           'discord_bot/commands/help'
     autoload :MessageCommand, 'discord_bot/commands/message_command'
+    autoload :NiceMessage,    'discord_bot/commands/nice_message'
     autoload :Model,          'discord_bot/commands/model'
     autoload :ReplyToMessage, 'discord_bot/commands/reply_to_message'
     autoload :Source,         'discord_bot/commands/source'

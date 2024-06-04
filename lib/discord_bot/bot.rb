@@ -96,6 +96,7 @@ module DiscordBot
         DiscordBot::Commands::HelloFriend,
         DiscordBot::Commands::Help,
         DiscordBot::Commands::Model,
+        DiscordBot::Commands::NiceMessage,
         DiscordBot::Commands::ReplyToMessage,
         DiscordBot::Commands::Source,
         DiscordBot::Commands::SystemPrompt,
@@ -103,7 +104,7 @@ module DiscordBot
       ]
     end
 
-    def run(skip_motd: false, fast_boot: false)
+    def run(skip_motd: false, fast_boot: true)
       Logger.info 'Initializing bot'
       unless fast_boot
         pull_default_model
