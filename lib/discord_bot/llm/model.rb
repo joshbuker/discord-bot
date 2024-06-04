@@ -21,7 +21,7 @@ module DiscordBot
                   model_name
                 end
 
-        details = model_details(model_name)
+        details = model_details
         @file_size = details['file_size']
         @parameter_size = details['parameter_size']
         @quantization_level = details['quantization_level']
