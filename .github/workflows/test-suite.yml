@@ -20,7 +20,7 @@ jobs:
         ruby-version: 3
         bundler-cache: true
     - name: Run bundle audit
-      run: bundle exec rake bundle:audit
+      run: bundle exec rake bundle:audit:update bundle:audit
 
   rspec:
 
