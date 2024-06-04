@@ -19,8 +19,8 @@ module DiscordBot
               command.subcommand(:disconnect, 'Disconnect from a voice channel')
               command.subcommand(:tuturu, 'Play tuturu in current voice channel')
               command.subcommand(:stop, 'Stop playing the current audio')
-              command.subcommand(:youtube, 'Play audio from a YouTube video') do |subcommand|
-                subcommand.string(:url, 'URL of the youtube video', required: true)
+              command.subcommand(:youtube, 'Play audio from a YouTube video') do |options|
+                options.string(:url, 'URL of the youtube video', required: true)
               end
             end
           end
