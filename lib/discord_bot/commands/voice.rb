@@ -1,5 +1,11 @@
 module DiscordBot
   module Commands
+    ##
+    # Command for interacting with voice chat.
+    #
+    # rubocop:disable Metrics/ClassLength
+    # rubocop:disable Metrics/MethodLength
+    #
     class Voice < Base
       class << self
         def description
@@ -18,6 +24,8 @@ module DiscordBot
           end
         end
 
+        # FIXME: Is there a way to fix the branch complexity of this?
+        # rubocop:disable Metrics/AbcSize
         def handle
           Bot.command_callback(command_name).subcommand(:connect) do |event|
             connect(DiscordBot::Events::Command.new(event))
@@ -39,11 +47,13 @@ module DiscordBot
             play_youtube(DiscordBot::Events::Command.new(event))
           end
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
         def connected_to_voice?(voice_channel)
           return false unless voice_channel.present?
+
           Bot.voice(voice_channel.id).present?
         end
 
@@ -52,12 +62,19 @@ module DiscordBot
           if connected_to_voice?(voice_channel)
             command.respond_with("Already connected to #{voice_channel.name}")
           elsif voice_channel.nil?
-            command.respond_with("You're not in any voice channel!\nPlease join a voice channel then run `/voice connect` again.")
+            command.respond_with(
+              "You're not in any voice channel!\nPlease join a voice channel " \
+              'then run `/voice connect` again.'
+            )
           else
-            command.respond_with("Attempting to join voice channel #{voice_channel.name}...")
+            command.respond_with(
+              "Attempting to join voice channel #{voice_channel.name}..."
+            )
             Bot.voice_connect(voice_channel)
             Logger.info "Connected to voice channel: #{voice_channel.name}"
-            command.update_response("Joined voice channel #{voice_channel.name}")
+            command.update_response(
+              "Joined voice channel #{voice_channel.name}"
+            )
           end
         end
 
@@ -65,11 +82,17 @@ module DiscordBot
           voice_channel = command.bot_voice_channel
           if connected_to_voice?(voice_channel)
             voip = Bot.voice(voice_channel.id)
-            Logger.info "Disconnecting from voice channel: #{voice_channel.name}"
+            Logger.info(
+              "Disconnecting from voice channel: #{voice_channel.name}"
+            )
             voip.destroy
-            command.respond_with("Disconnected from voice channel #{voice_channel.name}")
+            command.respond_with(
+              "Disconnected from voice channel #{voice_channel.name}"
+            )
           else
-            command.respond_with("Nothing to do, not connected to voice currently")
+            command.respond_with(
+              'Nothing to do, not connected to voice currently'
+            )
           end
         end
 
@@ -77,12 +100,14 @@ module DiscordBot
           voice_channel = command.bot_voice_channel
           if connected_to_voice?(voice_channel)
             voip = Bot.voice(voice_channel.id)
-            Logger.info "Stopping audio"
-            command.respond_with("Stopping playback...")
+            Logger.info 'Stopping audio'
+            command.respond_with('Stopping playback...')
             voip.stop_playing
-            command.update_response("Playback stopped.")
+            command.update_response('Playback stopped.')
           else
-            command.respond_with("Nothing to do, not connected to voice currently")
+            command.respond_with(
+              'Nothing to do, not connected to voice currently'
+            )
           end
         end
 
@@ -112,7 +137,9 @@ module DiscordBot
               Logger.warn 'Could not find tuturu.wav'
             end
           else
-            command.respond_with("Please connect to voice with `/voice connect` first")
+            command.respond_with(
+              'Please connect to voice with `/voice connect` first'
+            )
           end
         end
 
@@ -131,7 +158,9 @@ module DiscordBot
               command.respond_with('Invalid YouTube URL')
             end
           else
-            command.respond_with("Please connect to voice with `/voice connect` first")
+            command.respond_with(
+              'Please connect to voice with `/voice connect` first'
+            )
           end
         end
 
@@ -140,11 +169,11 @@ module DiscordBot
             '/workspaces/discord-bot/data/tuturu.wav'
           elsif File.exist?('/usr/src/app/data/tuturu.wav')
             '/usr/src/app/data/tuturu.wav'
-          else
-            nil
           end
         end
       end
     end
+    # rubocop:enable Metrics/ClassLength
+    # rubocop:enable Metrics/MethodLength
   end
 end

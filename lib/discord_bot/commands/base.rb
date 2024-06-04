@@ -1,5 +1,8 @@
 module DiscordBot
   module Commands
+    ##
+    # Base class for slash commands
+    #
     class Base
       class << self
         def register
@@ -19,7 +22,7 @@ module DiscordBot
         end
 
         def command_name
-          self.name.demodulize.underscore.to_sym
+          name.demodulize.underscore.to_sym
         end
 
         def description

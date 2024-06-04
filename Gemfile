@@ -1,16 +1,16 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem 'discordrb'
-gem 'base64'
-gem 'opus-ruby'
 gem 'activesupport'
+gem 'base64'
+gem 'discordrb'
+gem 'opus-ruby'
 gem 'rest-client'
 
 # FIXME: Don't load dev dependencies in production Dockerfile
+gem 'bundler-audit'
 gem 'byebug'
+gem 'rake'
 gem 'rspec'
 gem 'rubocop'
 gem 'rubocop-performance'
 gem 'rubocop-rspec'
-gem 'bundler-audit'
-gem 'rake'

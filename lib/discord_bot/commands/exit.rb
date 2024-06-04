@@ -1,5 +1,8 @@
 module DiscordBot
   module Commands
+    ##
+    # Command for shutting down the bot.
+    #
     class Exit < Base
       class << self
         def description

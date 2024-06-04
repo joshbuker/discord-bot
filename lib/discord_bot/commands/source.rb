@@ -1,5 +1,8 @@
 module DiscordBot
   module Commands
+    ##
+    # Command for finding the source code of the bot.
+    #
     class Source < Base
       class << self
         def description
@@ -13,8 +16,8 @@ module DiscordBot
         private
 
         def source_code_message
-          "You can find my source code at: "\
-          "https://github.com/joshbuker/discord-bot"
+          'You can find my source code at: ' \
+          'https://github.com/joshbuker/discord-bot'
         end
       end
     end

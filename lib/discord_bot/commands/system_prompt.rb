@@ -1,5 +1,8 @@
 module DiscordBot
   module Commands
+    ##
+    # Provides commands for interacting with the system prompt for the LLM.
+    #
     class SystemPrompt < Base
       class << self
         def description
@@ -37,18 +40,28 @@ module DiscordBot
         end
 
         def reset_system_prompt(command)
-          default_prompt = Bot.reset_system_prompt(channel_id: command.channel_id)
-          command.respond_with("System prompt reset to default:\n\n#{default_prompt}", only_to_user: false)
+          default_prompt = Bot.reset_system_prompt(
+            channel_id: command.channel_id
+          )
+          command.respond_with(
+            "System prompt reset to default:\n\n#{default_prompt}",
+            only_to_user: false
+          )
         end
 
+        # rubocop:disable Naming/AccessorMethodName
         def set_system_prompt(command)
           system_prompt = command.options['system_prompt']
           Bot.set_channel_system_prompt(
-            channel_id: command.channel_id,
+            channel_id:    command.channel_id,
             system_prompt: system_prompt
           )
-          command.respond_with("System prompt has been reset to:\n\n#{system_prompt}", only_to_user: false)
+          command.respond_with(
+            "System prompt has been reset to:\n\n#{system_prompt}",
+            only_to_user: false
+          )
         end
+        # rubocop:enable Naming/AccessorMethodName
       end
     end
   end

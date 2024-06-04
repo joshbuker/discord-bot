@@ -1,4 +1,7 @@
 module DiscordBot
+  ##
+  # Wrapper around the User object
+  #
   class User
     def initialize(id: nil, user: nil)
       if user
@@ -7,18 +10,16 @@ module DiscordBot
         @user = Bot.find_user_by_id(id)
       end
 
-      if @user.nil?
-        raise ArgumentError, 'Invalid user'
-      end
+      return unless @user.nil?
+
+      raise ArgumentError, 'Invalid user'
     end
 
     def whois
       "@#{@user.name}"
     end
 
-    def user
-      @user
-    end
+    attr_reader :user
 
     def mention
       @user.mention
@@ -44,11 +45,13 @@ module DiscordBot
 
     def ==(other)
       return false if other.nil?
+
       if can_compare?(other)
         id == other.id
       else
         raise ArgumentError,
-          "Cannot compare #{self.class.name} to #{other.class.name}, both must be users"
+          "Cannot compare #{self.class.name} to #{other.class.name}, both " \
+          'must be users'
       end
     end
 

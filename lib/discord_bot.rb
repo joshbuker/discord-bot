@@ -21,10 +21,14 @@ class Integer
 end
 
 ##
-# A simple Discord bot written using Ruby. It provides various commands and will
-# eventually include LLM responses to questions directed towards it.
+# A Discord Bot written Ruby. Currently supports LLM responses in chat, along
+# with slash commands for modifying the LLM and interacting in voice chat.
 #
 module DiscordBot
+  ##
+  # Slash Commands, as well as User and Message commands for interacting with
+  # the bot beyond just LLM chat responses.
+  #
   module Commands
     autoload :Base,           'discord_bot/commands/base'
     autoload :Exit,           'discord_bot/commands/exit'
@@ -39,17 +43,23 @@ module DiscordBot
     autoload :Voice,          'discord_bot/commands/voice'
   end
 
+  ##
+  # Lightweight wrappers for the callback response objects from Discord events.
+  #
   module Events
     autoload :Base,    'discord_bot/events/base'
     autoload :Command, 'discord_bot/events/command'
     autoload :Message, 'discord_bot/events/message'
   end
 
+  ##
+  # Contains everything needed to interact with the LLM via Ollama.
+  #
   module LLM
-    API_PROTOCOL  = ENV['OLLAMA_SERVICE_PROTOCOL'] || "http://"
+    API_PROTOCOL  = ENV['OLLAMA_SERVICE_PROTOCOL'] || 'http://'
     API_HOST      = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
     API_PORT      = ENV['OLLAMA_SERVICE_PORT'] || '11434'
-    API_URL       = API_PROTOCOL + API_HOST + ':' + API_PORT
+    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
     DEFAULT_MODEL = ENV['DEFAULT_LLM_MODEL'] || 'llama3'
 
     autoload :ApiRequest,   'discord_bot/llm/api_request'

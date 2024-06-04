@@ -20,7 +20,11 @@ AllCops:
 ############
 
 Layout/LineLength:
-  AllowedPatterns: ['it { is_expected.']
+  AllowedPatterns:
+    - 'it { is_expected.'
+    - 'command.subcommand'
+    - 'subcommand.'
+    - 'https://'
   Max: 80
 # Variable assignment can be indented weirdly, so align to the ending statement
 # instead
@@ -43,6 +47,12 @@ Layout/DotPosition:
 # (doesn't seem to work all the time though)
 Layout/SpaceAroundOperators:
   AllowForAlignment: true
+# I feel like this looks ugly
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: false
+# And this too
+Layout/MultilineOperationIndentation:
+  Enabled: false
 
 ############
 ## Naming ##
@@ -89,10 +99,9 @@ Style/ModuleFunction:
 # The readability of [:some, :various, :symbols] > %i[some various symbols]
 Style/SymbolArray:
   EnforcedStyle: brackets
-# Very tempted to disable this cop entirely.
-# Style/FrozenStringLiteralComment:
-#   Exclude:
-#     - 'spec/dummy_app/db/**/*'
+# Litters code with magic comment that's annoying and provides minimal benefit
+Style/FrozenStringLiteralComment:
+  Enabled: false
 
 #############
 ## Metrics ##

@@ -1,5 +1,8 @@
 module DiscordBot
   module Events
+    ##
+    # Represents a command received from Discord.
+    #
     class Command < Base
       def user
         @event.user

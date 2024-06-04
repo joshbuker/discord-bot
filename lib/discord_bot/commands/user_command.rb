@@ -1,5 +1,10 @@
 module DiscordBot
   module Commands
+    ##
+    # Inheritance Class for User Commands
+    #
+    # TODO: Refactor into new module
+    #
     class UserCommand < Base
       class << self
         def register
@@ -15,7 +20,7 @@ module DiscordBot
         end
 
         def command_name
-          self.name.demodulize.titlecase
+          name.demodulize.titlecase
         end
       end
     end

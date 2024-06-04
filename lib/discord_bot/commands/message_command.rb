@@ -1,6 +1,10 @@
 module DiscordBot
   module Commands
+    ##
+    # Provides a base class for message commands.
+    #
     # TODO: Use modules instead of classes for different types of commands?
+    #
     class MessageCommand < Base
       class << self
         def register
@@ -16,7 +20,7 @@ module DiscordBot
         end
 
         def command_name
-          self.name.demodulize.titlecase
+          name.demodulize.titlecase
         end
       end
     end

@@ -1,19 +1,22 @@
 module DiscordBot
+  ##
+  # Provides a globally accessible configuration for the Bot.
+  #
   class Config
     class << self
       # TODO: Migrate to Slash command permissions?
       def admin_users
         [
-          DiscordBot::User.new(id: 121475289397198848),
-          DiscordBot::User.new(id: 227141869962919936),
-          DiscordBot::User.new(id: 381899834564804622),
-          DiscordBot::User.new(id: 478093835172446209),
-          DiscordBot::User.new(id: 722652181894791238)
+          DiscordBot::User.new(id: 121_475_289_397_198_848),
+          DiscordBot::User.new(id: 227_141_869_962_919_936),
+          DiscordBot::User.new(id: 381_899_834_564_804_622),
+          DiscordBot::User.new(id: 478_093_835_172_446_209),
+          DiscordBot::User.new(id: 722_652_181_894_791_238)
         ]
       end
 
       def bot_name
-        ENV['BOT_NAME'] || "Ruby"
+        ENV['BOT_NAME'] || 'Ruby'
       end
 
       # TODO: Determine least privilege and request that instead
@@ -23,13 +26,13 @@ module DiscordBot
       end
 
       def discord_bot_token
-        ENV['RUBY_DISCORD_BOT_TOKEN']
+        ENV.fetch('RUBY_DISCORD_BOT_TOKEN', nil)
       end
 
       def slash_command_server_ids
         [
-          933463011551764550,
-          1237136024573051053
+          933_463_011_551_764_550,
+          1_237_136_024_573_051_053
         ]
       end
     end

@@ -1,16 +1,19 @@
 module DiscordBot
   module LLM
+    ##
+    # Provides access to the LLM via REST API Requests.
+    #
     class ApiRequest
       DEFAULT_HEADERS = {
         content_type: :json,
-        accept: :json
-      }
+        accept:       :json
+      }.freeze
 
       class << self
         def get(endpoint, headers = DEFAULT_HEADERS, timeout = nil)
           RestClient::Request.execute(
-            method: :get,
-            url: "#{DiscordBot::LLM::API_URL}#{endpoint}",
+            method:  :get,
+            url:     "#{DiscordBot::LLM::API_URL}#{endpoint}",
             headers: headers,
             timeout: timeout
           )
@@ -18,8 +21,8 @@ module DiscordBot
 
         def post(endpoint, payload, headers = DEFAULT_HEADERS, timeout = nil)
           RestClient::Request.execute(
-            method: :post,
-            url: "#{DiscordBot::LLM::API_URL}#{endpoint}",
+            method:  :post,
+            url:     "#{DiscordBot::LLM::API_URL}#{endpoint}",
             payload: payload,
             headers: headers,
             timeout: timeout
@@ -33,8 +36,8 @@ module DiscordBot
         def chat(messages:, model_name:)
           payload = {
             messages: messages,
-            model: model_name,
-            stream: false
+            model:    model_name,
+            stream:   false
           }.to_json
           post('/api/chat', payload)
         end

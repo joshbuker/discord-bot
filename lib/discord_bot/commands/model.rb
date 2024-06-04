@@ -1,5 +1,12 @@
 module DiscordBot
   module Commands
+    ##
+    # Provides methods for interacting with the LLM model.
+    #
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/ClassLength
+    #
     class Model < Base
       class << self
         def description
@@ -51,62 +58,99 @@ module DiscordBot
         end
 
         def reset_model(command)
-          Logger.info "#{command.whois} has reset the LLM model to default for #{command.channel_name}"
+          Logger.info(
+            "#{command.whois} has reset the LLM model to default for " \
+            "#{command.channel_name}"
+          )
           Bot.reset_model(channel_id: command.channel_id)
           default_model = DiscordBot::LLM::Model.new
-          command.respond_with("Reset the LLM model to default:\n#{default_model.about}", only_to_user: false)
+          command.respond_with(
+            "Reset the LLM model to default:\n#{default_model.about}",
+            only_to_user: false
+          )
         end
 
         def pull_model(command)
           unless command.ran_by_admin?
-            Logger.info "#{command.whois} tried running the pull model command without permission"
-            command.respond_with('Due to the large size of models, this command is restricted to admins')
+            Logger.info(
+              "#{command.whois} tried running the pull model command without " \
+              'permission'
+            )
+            command.respond_with(
+              'Due to the large size of models, this command is restricted ' \
+              'to admins'
+            )
             return
           end
           requested_model = command.options['model']
-          Logger.info "#{command.whois} has requested the LLM model #{requested_model}"
+          Logger.info(
+            "#{command.whois} has requested the LLM model #{requested_model}"
+          )
           command.respond_with("Pulling LLM model \"#{requested_model}\"...")
           model = DiscordBot::LLM::Model.new(model_name: requested_model)
           if model.available?
-            command.update_response("\"#{requested_model}\" is already available")
+            command.update_response(
+              "\"#{requested_model}\" is already available"
+            )
           else
             begin
               model.pull
               command.update_response("Pulled LLM model \"#{requested_model}\"")
             rescue DiscordBot::Errors::FailedToPullModel
-              command.update_response("Failed to pull LLM model \"#{requested_model}\"")
+              command.update_response(
+                "Failed to pull LLM model \"#{requested_model}\""
+              )
             end
           end
-        rescue DiscordBot::Errors::PermissionDenied => error
-          Logger.warn error.message
+        rescue DiscordBot::Errors::PermissionDenied => e
+          Logger.warn e.message
         end
 
+        # rubocop:disable Naming/AccessorMethodName
         def set_model(command)
           requested_model = command.options['model']
           model = DiscordBot::LLM::Model.new(model_name: requested_model)
           if model.available?
-            Logger.info "#{command.whois} has set the LLM model to #{requested_model} for \##{command.channel_name}"
+            Logger.info(
+              "#{command.whois} has set the LLM model to #{requested_model} " \
+              "for ##{command.channel_name}"
+            )
             Bot.set_model(channel_id: command.channel_id, model: model)
-            command.respond_with("Set LLM model to:\n\"#{model.about}\"", only_to_user: false)
+            command.respond_with(
+              "Set LLM model to:\n\"#{model.about}\"",
+              only_to_user: false
+            )
           else
-            command.respond_with("That model is currently unavailable. Try running `/model pull #{requested_model}` first")
+            command.respond_with(
+              'That model is currently unavailable. Try running ' \
+              "`/model pull #{requested_model}` first"
+            )
           end
         end
+        # rubocop:enable Naming/AccessorMethodName
 
         def print_current_model(command)
           Logger.info "#{command.whois} inspected the current model"
           model = Bot.current_model(channel_id: command.channel_id)
-          command.respond_with("The currently loaded model for \##{command.channel_name} is:\n#{model.about}")
+          command.respond_with(
+            "The currently loaded model for ##{command.channel_name} is:" \
+            "\n#{model.about}"
+          )
         end
 
         def list_available_models(command)
-          Logger.info "#{command.whois} requested a list of the available models"
+          Logger.info(
+            "#{command.whois} requested a list of the available models"
+          )
           models = DiscordBot::LLM::Model.available_models
           # TODO: Also show file size, parameter size, and quantization level
-          formatted_list = models.map{ |model| "- #{model.about}" }.join("\n")
+          formatted_list = models.map { |model| "- #{model.about}" }.join("\n")
           command.respond_with("The currently available models are:\n#{formatted_list}\n\nMore can be found at: https://ollama.com/library")
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/ClassLength
   end
 end

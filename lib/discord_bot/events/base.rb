@@ -1,5 +1,8 @@
 module DiscordBot
   module Events
+    ##
+    # Base class for events.
+    #
     class Base
       attr_reader :event
 
