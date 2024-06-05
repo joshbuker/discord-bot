@@ -114,7 +114,7 @@ module DiscordBot
       ]
     end
 
-    def run(skip_motd: false, fast_boot: false)
+    def run(skip_motd: false, fast_boot: true)
       Logger.info 'Initializing bot'
       unless fast_boot
         pull_default_model

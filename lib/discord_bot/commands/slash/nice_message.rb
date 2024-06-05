@@ -4,8 +4,9 @@ module DiscordBot
       class NiceMessage < Base
         class << self
           def description
-            "Provides the source code for #{Config.bot_name}"
+            "allows user to send a nice message to another user though ruby bot #{Config.bot_name}"
           end
+
           def register
             Bot.register_command(command_name, description) do |command|
               command.user(:user, 'What user to message?', required: true)
@@ -26,6 +27,9 @@ module DiscordBot
             )
             command.update_response('Nice message sent')
             user.direct_message(response.message)
+            Logger.info(
+              "message sent: #{command.options["message"]}\nsender: #{(command.whois)}\nSent to: #{user.whois}"
+            )
           end
         end
       end
