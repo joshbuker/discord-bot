@@ -1,5 +1,8 @@
 module DiscordBot
   module Events
+    ##
+    # Represents a command received from Discord.
+    #
     class Command < Base
       def user
         @event.user
@@ -39,6 +42,14 @@ module DiscordBot
 
       def update_response(response)
         @event.edit_response(content: response)
+      end
+
+      def send_image(image:, caption:, filename: 'attachment.png')
+        @event.channel.send_file(
+          image,
+          caption: caption,
+          filename: filename
+        )
       end
     end
   end

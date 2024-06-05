@@ -1,5 +1,8 @@
 module DiscordBot
   module LLM
+    ##
+    # Represents an Ollama model
+    #
     class Model
       attr_reader :name, :file_size, :parameter_size, :quantization_level
 
@@ -12,13 +15,13 @@ module DiscordBot
       end
 
       def initialize(model_name: nil)
-        if model_name.nil?
-          @name = DiscordBot::LLM::DEFAULT_MODEL
-        else
-          @name = model_name
-        end
+        @name = if model_name.nil?
+                  DiscordBot::LLM::DEFAULT_MODEL
+                else
+                  model_name
+                end
 
-        details = model_details(model_name)
+        details = model_details
         @file_size = details['file_size']
         @parameter_size = details['parameter_size']
         @quantization_level = details['quantization_level']
@@ -32,16 +35,20 @@ module DiscordBot
       end
 
       def about
-        "Name: `#{name}` - File size: `#{file_size}` - Parameter size: `#{parameter_size}` - Quantization level: `#{quantization_level}`"
+        "Name: `#{name}` - " \
+        "File size: `#{file_size}` - " \
+        "Parameter size: `#{parameter_size}` - " \
+        "Quantization level: `#{quantization_level}`"
       end
 
       # TODO: Add automatic retry with backoff
       def pull
         return if available?
+
         DiscordBot::LLM::ApiRequest.pull_model(model_name: name)
-      rescue RestClient::InternalServerError => error
+      rescue RestClient::InternalServerError => e
         raise DiscordBot::Errors::FailedToPullModel,
-          "Model pull failed due to: \"#{error.message}\""
+          "Model pull failed due to: \"#{e.message}\""
       end
 
       private
@@ -54,17 +61,23 @@ module DiscordBot
         end
       end
 
-      def model_details(model_name)
+      # rubocop:disable Metrics/MethodLength
+      def model_details
         response = DiscordBot::LLM::ApiRequest.list_local_models
-        model_info = JSON.parse(response.body)['models'].find{ |model| model['name'] == model_identifier }
+        model_info = JSON.parse(response.body)['models'].find do |model|
+          model['name'] == model_identifier
+        end
         if model_info.present?
-          model_info['details'].merge({ 'file_size' => model_info['size'].to_human_filesize })
+          model_info['details'].merge(
+            { 'file_size' => model_info['size'].to_human_filesize }
+          )
         else
           {}
         end
       rescue RestClient::NotFound
         {}
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

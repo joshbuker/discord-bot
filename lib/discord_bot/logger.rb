@@ -1,4 +1,9 @@
 module DiscordBot
+  ##
+  # Logs various usage information.
+  #
+  # TODO: See if more metadata should be attached for monitoring purposes
+  #
   class Logger
     def self.log(message)
       puts message

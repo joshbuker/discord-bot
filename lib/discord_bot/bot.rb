@@ -1,7 +1,16 @@
 module DiscordBot
-  # FIXME: This class is big and unwieldy, and should probably be broken up some more
+  ##
+  # Provides an interface with the Discord bot, and is the overall entrypoint
+  # for the code.
+  #
+  # FIXME: This class is big and unwieldy, and should probably be broken up some
+  #        more
+  #
+  # rubocop:disable Metrics/ClassLength
+  # rubocop:disable Metrics/MethodLength
+  #
   class Bot
-    attr_reader :message_handler, :commands
+    attr_reader :message_handler, :commands, :bot
 
     # Class Methods
 
@@ -74,9 +83,9 @@ module DiscordBot
         instance.reset_system_prompt(channel_id: channel_id)
       end
 
-      def set_channel_system_prompt(channel_id:,system_prompt:)
+      def set_channel_system_prompt(channel_id:, system_prompt:)
         instance.set_channel_system_prompt(
-          channel_id: channel_id,
+          channel_id:    channel_id,
           system_prompt: system_prompt
         )
       end
@@ -86,21 +95,22 @@ module DiscordBot
 
     def initialize
       @bot = Discordrb::Bot.new(
-        token: Config.discord_bot_token,
+        token:   Config.discord_bot_token,
         intents: Config.discord_bot_intents
       )
       @channel_conversations = {}
       @channel_models = {}
       @commands = [
-        DiscordBot::Commands::Exit,
-        DiscordBot::Commands::HelloFriend,
-        DiscordBot::Commands::Help,
-        DiscordBot::Commands::Model,
-        DiscordBot::Commands::NiceMessage,
-        DiscordBot::Commands::ReplyToMessage,
-        DiscordBot::Commands::Source,
-        DiscordBot::Commands::SystemPrompt,
-        DiscordBot::Commands::Voice
+        DiscordBot::Commands::Message::ReplyToMessage,
+        DiscordBot::Commands::Slash::Exit,
+        DiscordBot::Commands::Slash::Help,
+        DiscordBot::Commands::Slash::Image,
+        DiscordBot::Commands::Slash::Model,
+        DiscordBot::Commands::Slash::NiceMessage,
+        DiscordBot::Commands::Slash::Source,
+        DiscordBot::Commands::Slash::SystemPrompt,
+        DiscordBot::Commands::Slash::Voice,
+        DiscordBot::Commands::User::HelloFriend
       ]
     end
 
@@ -115,9 +125,9 @@ module DiscordBot
       motd unless skip_motd
       # at_exit { @bot.stop }
       Logger.info 'Starting bot'
-      @bot.run(true)
+      @bot.run(true) # Run bot async so we can log that the bot started
       Logger.info 'Bot running'
-      @bot.join
+      @bot.join # Reattach to the bot thread now that we've logged the startup
     end
 
     def delete_unused_commands
@@ -127,21 +137,10 @@ module DiscordBot
         Logger.info "Command \"/#{command.name}\" is unused, deleting"
         @bot.delete_application_command(command.id)
       end
-
-      # Config.slash_command_server_ids.each do |server_id|
-      #   existing_commands = @bot.get_application_commands(server_id: server_id)
-      #   commands_to_delete(existing_commands).each do |command|
-      #     @bot.delete_application_command(command.id, server_id: server_id)
-      #   end
-      # end
     end
 
     def motd
       Logger.info "Bot Invite URL: #{@bot.invite_url}"
-    end
-
-    def bot
-      @bot
     end
 
     def find_user_by_id(id)
@@ -190,12 +189,17 @@ module DiscordBot
     end
 
     def reset_system_prompt(channel_id:)
-      Logger.info("System prompt for channel #{channel_id} has been reset to default")
+      Logger.info(
+        "System prompt for channel #{channel_id} has been reset to default"
+      )
       conversation(channel_id).reset_system_prompt
     end
 
-    def set_channel_system_prompt(channel_id:,system_prompt:)
-      Logger.info("System prompt for channel #{channel_id} has been reset to:\n#{system_prompt}")
+    def set_channel_system_prompt(channel_id:, system_prompt:)
+      Logger.info(
+        "System prompt for channel #{channel_id} has been reset to:" \
+        "\n#{system_prompt}"
+      )
       conversation(channel_id).set_system_prompt(system_prompt: system_prompt)
     end
 
@@ -227,8 +231,8 @@ module DiscordBot
     def generate_llm_response(channel_id:, message:)
       DiscordBot::LLM::Response.new(
         conversation_history: conversation(channel_id),
-        user_message: message,
-        model: model(channel_id)
+        user_message:         message,
+        model:                model(channel_id)
       )
     end
 
@@ -237,18 +241,18 @@ module DiscordBot
     def pull_default_model
       Logger.info 'Pulling default LLM model'
       begin
-        DiscordBot::LLM::Model.new(model_name: DiscordBot::LLM::DEFAULT_MODEL).pull
-      rescue DiscordBot::Errors::FailedToPullModel => error
-        Logger.fatal error.message
+        DiscordBot::LLM::Model.new(
+          model_name: DiscordBot::LLM::DEFAULT_MODEL
+        ).pull
+      rescue DiscordBot::Errors::FailedToPullModel => e
+        Logger.fatal e.message
         shutdown
       end
     end
 
     def register_commands
       Logger.info 'Registering commands'
-      commands.each do |command|
-        command.register
-      end
+      commands.each(&:register)
     end
 
     def handle_message(message)
@@ -264,14 +268,16 @@ module DiscordBot
       end
     end
 
+    # rubocop:disable Naming/AccessorMethodName
     def set_system_prompt_from_chat(message)
       system_prompt = message.content.sub('!prompt ', '')
       set_channel_system_prompt(
-        channel_id: message.channel_id,
+        channel_id:    message.channel_id,
         system_prompt: system_prompt
       )
       message.reply_with("System prompt has been reset to:\n\n#{system_prompt}")
     end
+    # rubocop:enable Naming/AccessorMethodName
 
     def fix_table(message)
       message.reply_with("┬─┬ノ( º _ ºノ)\nSo uncivilized!")
@@ -286,7 +292,7 @@ module DiscordBot
       message.reply_with(response.message)
     end
 
-    def no_action(message)
+    def no_action(_message)
       Logger.info 'No action needed'
     end
 
@@ -296,9 +302,7 @@ module DiscordBot
         handle_message(DiscordBot::Events::Message.new(event))
       end
 
-      commands.each do |command|
-        command.handle
-      end
+      commands.each(&:handle)
     end
 
     def commands_to_delete(existing_commands)
@@ -309,4 +313,6 @@ module DiscordBot
       end
     end
   end
+  # rubocop:enable Metrics/ClassLength
+  # rubocop:enable Metrics/MethodLength
 end

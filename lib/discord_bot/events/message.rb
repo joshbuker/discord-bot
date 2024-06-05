@@ -1,5 +1,8 @@
 module DiscordBot
   module Events
+    ##
+    # Represents a message received from Discord.
+    #
     class Message < Base
       # Discord times out the typing indicator after ~5 seconds, so resend every
       # 3 seconds
@@ -15,7 +18,7 @@ module DiscordBot
 
       def from
         if server.present?
-          "#{server.name} \##{channel.name}"
+          "#{server.name} ##{channel.name}"
         else
           "<@#{user.id}> @#{channel.name} \"#{name}\""
         end
@@ -59,8 +62,9 @@ module DiscordBot
         mentions_bot? || direct_message?
       end
 
+      # rubocop:disable Metrics/MethodLength
       def reply_with(response)
-        return if response.size.zero?
+        return if response.empty?
 
         if response.size <= 2000
           @event.message.reply!(response)
@@ -69,14 +73,16 @@ module DiscordBot
           respond_to = @event.message
           responses.each do |chopped_response|
             next if chopped_response.nil?
+
             respond_to = respond_to.reply!(chopped_response)
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       def start_typing_thread
         Thread.new do
-          while(true)
+          loop do
             channel.start_typing
             sleep(TYPING_SLEEP_INTERVAL)
           end
@@ -86,9 +92,9 @@ module DiscordBot
       private
 
       def chop(string, size)
-        count = (string.size-1 / size)
+        count = ((string.size - 1) / size)
         (0..count).map do |i|
-          string[i*size, size]
+          string[i * size, size]
         end
       end
     end
