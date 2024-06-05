@@ -13,7 +13,7 @@ module DiscordBot
         end
         
         def run(command)
-          user=DiscorBot::User.new(user: Bot.find_user_by_id(command.options["user"]))
+          user=DiscordBot::User.new(user: Bot.find_user_by_id(command.options["user"]))
           message=command.options["message"]
           conversation=DiscordBot::LLM::Conversation.new
           model=DiscordBot::LLM::Model.new
