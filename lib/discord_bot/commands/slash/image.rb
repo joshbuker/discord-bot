@@ -32,6 +32,17 @@ module DiscordBot
           end
 
           def generate_image(command)
+            unless command.ran_by_admin?
+              Logger.info(
+                "#{command.whois} tried running the image generate command " \
+                'without permission'
+              )
+              command.respond_with(
+                'This command is restricted to admins until some safeguards ' \
+                'have been implemented.'
+              )
+              return
+            end
             Logger.info("Image requested by #{command.whois}")
             command.respond_with('Generating image')
             image_options = DiscordBot::StableDiffusion::ImageOptions.new(
@@ -47,8 +58,6 @@ module DiscordBot
             Logger.info(
               "Sent image with the following options:\n#{image.about}"
             )
-          rescue StandardError => e
-            byebug
           end
         end
       end
