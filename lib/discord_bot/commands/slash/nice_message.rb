@@ -4,7 +4,7 @@ module DiscordBot
       class NiceMessage < Base
         class << self
           def description
-            "allows user to send a nice message to another user though ruby bot #{Config.bot_name}"
+            "allows user to send a nice message to another user though #{Config.bot_name}"
           end
 
           def register
