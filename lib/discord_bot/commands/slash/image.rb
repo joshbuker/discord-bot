@@ -48,13 +48,22 @@ module DiscordBot
             image_options = DiscordBot::StableDiffusion::ImageOptions.new(
               command.options
             )
-            image = DiscordBot::StableDiffusion::Image.new(
-              image_options: image_options
-            )
+            begin
+              image = DiscordBot::StableDiffusion::Image.new(
+                image_options: image_options
+              )
+            rescue StandardError => e
+              Logger.info "Failed to generate image due to:\n#{e.message}"
+              command.update_response(
+                "Failed to generate image due to the following error:\n" \
+                "#{e.message}"
+              )
+            end
             Logger.info 'Sending image'
             caption =
               "Generated an image requested by #{command.user.mention}:\n#{image.about}"
             command.send_image(image: image.content, caption: caption)
+            command.update_response('Image sent')
             Logger.info(
               "Sent image with the following options:\n#{image.about}"
             )
