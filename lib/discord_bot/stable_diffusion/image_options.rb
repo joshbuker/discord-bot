@@ -1,5 +1,8 @@
 module DiscordBot
   module StableDiffusion
+    ##
+    # Container for the various options associated with an image generation.
+    #
     class ImageOptions
       DEFAULT_WIDTH = 512
       DEFAULT_HEIGHT = 512
@@ -9,7 +12,8 @@ module DiscordBot
       attr_reader :prompt, :negative_prompt, :width, :height, :steps,
         :cfg_scale, :base_image
 
-      def initialize(options={})
+      # rubocop:disable Metrics
+      def initialize(options = {})
         @prompt = options['prompt']
         @negative_prompt = options['negative_prompt'] || ''
         @width = options['width'] || DEFAULT_WIDTH
@@ -24,6 +28,7 @@ module DiscordBot
 
         raise ArgumentError, 'Must provide a prompt' if @prompt.empty?
       end
+      # rubocop:enable Metrics
     end
   end
 end

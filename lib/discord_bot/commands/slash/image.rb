@@ -6,6 +6,7 @@ module DiscordBot
       #
       class Image < Base
         class << self
+          # rubocop:disable Metrics/MethodLength
           def register
             # Logger.info "Registering #{command_name} command"
             Bot.register_command(command_name, description) do |command|
@@ -20,6 +21,7 @@ module DiscordBot
               end
             end
           end
+          # rubocop:enable Metrics/MethodLength
 
           def handle
             Bot.command_callback(command_name).subcommand(:generate) do |event|
@@ -31,6 +33,8 @@ module DiscordBot
             'Uses stable diffusion to interact with images'
           end
 
+          # FIXME: Clearly too complex
+          # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
           def generate_image(command)
             unless command.ran_by_admin?
               Logger.info(
@@ -61,13 +65,15 @@ module DiscordBot
             end
             Logger.info 'Sending image'
             caption =
-              "Generated an image requested by #{command.user.mention}:\n#{image.about}"
+              "Generated an image requested by #{command.user.mention}:\n" \
+              "#{image.about}"
             command.send_image(image: image.content, caption: caption)
             command.update_response('Image sent')
             Logger.info(
               "Sent image with the following options:\n#{image.about}"
             )
           end
+          # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
         end
       end
     end
