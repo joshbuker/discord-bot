@@ -98,6 +98,10 @@ module DiscordBot
     autoload :Response,     'discord_bot/llm/response'
   end
 
+  ##
+  # Contains everything needed to interact with Stable Diffusion via
+  # Automatic1111 api.
+  #
   module StableDiffusion
     API_PROTOCOL  = ENV['STABLE_DIFFUSION_SERVICE_PROTOCOL'] || 'http://'
     API_HOST      = ENV['STABLE_DIFFUSION_SERVICE_NAME'] || 'localhost'

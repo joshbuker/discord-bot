@@ -47,7 +47,7 @@ module DiscordBot
       def send_image(image:, caption:, filename: 'attachment.png')
         @event.channel.send_file(
           image,
-          caption: caption,
+          caption:  caption,
           filename: filename
         )
       end

@@ -24,6 +24,7 @@ Layout/LineLength:
     - 'it { is_expected.'
     - 'command.subcommand'
     - 'subcommand.'
+    - 'options.'
     - 'https://'
   Max: 80
 # Variable assignment can be indented weirdly, so align to the ending statement

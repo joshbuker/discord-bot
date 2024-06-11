@@ -33,34 +33,42 @@ module DiscordBot
           get('/sdapi/v1/sd-models')
         end
 
+        # rubocop:disable Metrics/MethodLength
         def text_to_image(image_options:)
-          raise ArgumentError, 'Must provide a prompt!' unless image_options.prompt.present?
+          unless image_options.prompt.present?
+            raise ArgumentError,
+              'Must provide a prompt!'
+          end
 
           payload = {
-            prompt: image_options.prompt,
+            prompt:          image_options.prompt,
             negative_prompt: image_options.negative_prompt,
-            cfg_scale: image_options.cfg_scale,
-            steps: image_options.steps,
-            width: image_options.width,
-            height: image_options.height
+            cfg_scale:       image_options.cfg_scale,
+            steps:           image_options.steps,
+            width:           image_options.width,
+            height:          image_options.height
           }.to_json
           post('/sdapi/v1/txt2img', payload)
         end
 
         def image_to_image(image_options:)
-          raise ArgumentError, 'Must provide a prompt!' unless image_options.prompt.present?
+          unless image_options.prompt.present?
+            raise ArgumentError,
+              'Must provide a prompt!'
+          end
 
           payload = {
-            prompt: image_options.prompt,
+            prompt:          image_options.prompt,
             negative_prompt: image_options.negative_prompt,
-            cfg_scale: image_options.cfg_scale,
-            steps: image_options.steps,
-            width: image_options.width,
-            height: image_options.height,
-            init_images: [image_options.base_image]
+            cfg_scale:       image_options.cfg_scale,
+            steps:           image_options.steps,
+            width:           image_options.width,
+            height:          image_options.height,
+            init_images:     [image_options.base_image]
           }.to_json
           post('/sdapi/v1/img2img', payload)
         end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end

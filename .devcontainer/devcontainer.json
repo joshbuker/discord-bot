@@ -1,6 +1,6 @@
 {
   "name": "Ruby",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "compose.yml",
   "service": "bot",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
