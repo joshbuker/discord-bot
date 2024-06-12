@@ -44,11 +44,12 @@ module DiscordBot
         @event.edit_response(content: response)
       end
 
-      def send_image(image:, caption:, filename: 'attachment.png')
+      def send_image(image:, caption:, filename: 'attachment.png', spoiler: false)
         @event.channel.send_file(
           image,
           caption:  caption,
-          filename: filename
+          filename: filename,
+          spoiler:  spoiler
         )
       end
     end

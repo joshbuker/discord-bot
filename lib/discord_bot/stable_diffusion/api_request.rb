@@ -46,7 +46,10 @@ module DiscordBot
             cfg_scale:       image_options.cfg_scale,
             steps:           image_options.steps,
             width:           image_options.width,
-            height:          image_options.height
+            height:          image_options.height,
+            override_settings: {
+              nudenet_nsfw_censor_enable: false
+            }
           }.to_json
           post('/sdapi/v1/txt2img', payload)
         end
@@ -69,6 +72,15 @@ module DiscordBot
           post('/sdapi/v1/img2img', payload)
         end
         # rubocop:enable Metrics/MethodLength
+
+        def nsfw_check(input_image:)
+          raise ArgumentError, 'Must provide an input image!' unless input_image.present?
+
+          payload = {
+            input_image: input_image
+          }.to_json
+          post('/nudenet/censor', payload)
+        end
       end
     end
   end

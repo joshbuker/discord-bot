@@ -10,7 +10,7 @@ module DiscordBot
       DEFAULT_CFG_SCALE = 7
 
       attr_reader :prompt, :negative_prompt, :width, :height, :steps,
-        :cfg_scale, :base_image
+        :cfg_scale, :base_image, :force_spoiler
 
       # rubocop:disable Metrics
       def initialize(options = {})
@@ -20,6 +20,7 @@ module DiscordBot
         @height = options['height'] || DEFAULT_HEIGHT
         @steps = options['steps'] || DEFAULT_STEPS
         @cfg_scale = options['cfg_scale'] || DEFAULT_CFG_SCALE
+        @force_spoiler = options['force_spoiler'] || false
         # FIXME: This currently returns the attachment ID, not an object we can
         #        extract the base64 image from. Broken until that's in place.
         @base_image = options['base_image'] || nil

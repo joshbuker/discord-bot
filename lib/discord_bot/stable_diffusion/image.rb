@@ -20,6 +20,15 @@ module DiscordBot
       end
       # rubocop:enable Metrics/MethodLength
 
+      def nsfw?
+        return true if @options.force_spoiler
+        response = DiscordBot::StableDiffusion::ApiRequest.nsfw_check(
+          input_image: content
+        )
+        # If image is present, then it was censored and thus is nsfw
+        JSON.parse(response.body)["image"].present?
+      end
+
       attr_reader :body, :options
 
       def about
@@ -27,18 +36,37 @@ module DiscordBot
         "**Negative Prompt:**#{negative_prompt_details}\n" \
         "**CFG Scale:** `#{options.cfg_scale}` | " \
         "**Steps:** `#{options.steps}` | " \
-        "**Size:** `#{options.width}x#{options.height}`"
+        "**Size:** `#{options.width}x#{options.height}`" \
+        "#{nsfw_content_warning}"
       end
 
       def content
-        # "data:image/jpg;base64,#{@body['images'].first}"
-        base64_content = @body['images'].first
+        base64_content
+      end
+
+      def base64_content
+        @body['images'].first
+      end
+
+      def base64_html_src
+        return unless base64_content.present?
+
+        "data:image/jpg;base64,#{base64_content}"
+      end
+
+      def file
         return unless base64_content.present?
 
         StringIO.new(Base64.decode64(base64_content))
       end
 
       private
+
+      def nsfw_content_warning
+        return unless nsfw?
+        "\n\n**-> CONTENT WARNING <-**\n" \
+        "_This image may contain nsfw content. View only at your own discretion._"
+      end
 
       def negative_prompt_details
         if options.negative_prompt.present?

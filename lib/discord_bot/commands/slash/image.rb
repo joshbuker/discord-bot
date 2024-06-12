@@ -17,6 +17,7 @@ module DiscordBot
                 options.integer(:cfg_scale, 'How closely to follow the prompt instructions (default: 7)')
                 options.integer(:width, 'The width in pixels of the image (default: 512)')
                 options.integer(:height, 'The height in pixels of the image (default: 512)')
+                options.boolean(:force_spoiler, 'Force spoiler mode to be enabled (default: false)')
                 options.attachment(:base_image, 'Base image to work from for image to image')
               end
             end
@@ -67,7 +68,11 @@ module DiscordBot
             caption =
               "Generated an image requested by #{command.user.mention}:\n" \
               "#{image.about}"
-            command.send_image(image: image.content, caption: caption)
+            command.send_image(
+              image: image.content,
+              caption: caption,
+              spoiler: image.nsfw?
+            )
             command.update_response('Image sent')
             Logger.info(
               "Sent image with the following options:\n#{image.about}"

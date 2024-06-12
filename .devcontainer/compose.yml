@@ -31,7 +31,9 @@ services:
   automatic1111:
     image: ghcr.io/joshbuker/automatic1111-docker:main
     volumes:
-      - ~/Models:/model:ro
+      - "~/Stable Diffusion/model:/model:ro"
+      - venv:/app/venv
+      - repos:/app/repositories
     tty: true
     ports:
       - 7860:7860
@@ -45,3 +47,5 @@ services:
 
 volumes:
   ollama: {}
+  venv: {}
+  repos: {}
