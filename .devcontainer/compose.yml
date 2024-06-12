@@ -29,7 +29,7 @@ services:
               capabilities: [gpu]
 
   automatic1111:
-    image: ghcr.io/joshbuker/automatic1111-docker
+    image: ghcr.io/joshbuker/automatic1111-docker:main
     volumes:
       - ~/Models:/model:ro
     tty: true
