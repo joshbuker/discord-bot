@@ -53,6 +53,7 @@ module DiscordBot
       autoload :Base,         'discord_bot/commands/slash/base'
       autoload :Exit,         'discord_bot/commands/slash/exit'
       autoload :Help,         'discord_bot/commands/slash/help'
+      autoload :NiceMessage,  'discord_bot/commands/slash/nice_message'
       autoload :Image,        'discord_bot/commands/slash/image'
       autoload :Model,        'discord_bot/commands/slash/model'
       autoload :Source,       'discord_bot/commands/slash/source'
@@ -69,6 +70,7 @@ module DiscordBot
       autoload :Base,        'discord_bot/commands/user/base'
       autoload :HelloFriend, 'discord_bot/commands/user/hello_friend'
     end
+    
   end
 
   ##

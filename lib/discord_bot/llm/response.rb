@@ -8,11 +8,18 @@ module DiscordBot
       # rubocop:disable Metrics/MethodLength
       def initialize(conversation_history:, user_message:, model:)
         @model = model
-
-        conversation_history.append(
-          role:    'user',
-          message: adjusted_user_message(user_message)
-        )
+        
+        if user_message.is_a?(String)
+          conversation_history.append(
+            role: 'user',
+            message: user_message
+          )
+        else
+          conversation_history.append(
+            role: 'user',
+            message: adjusted_user_message(user_message)
+          )
+        end
 
         Logger.info 'Requesting LLM Response'
         response = DiscordBot::LLM::ApiRequest.chat(

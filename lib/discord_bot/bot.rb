@@ -106,6 +106,7 @@ module DiscordBot
         DiscordBot::Commands::Slash::Help,
         DiscordBot::Commands::Slash::Image,
         DiscordBot::Commands::Slash::Model,
+        DiscordBot::Commands::Slash::NiceMessage,
         DiscordBot::Commands::Slash::Source,
         DiscordBot::Commands::Slash::SystemPrompt,
         DiscordBot::Commands::Slash::Voice,
