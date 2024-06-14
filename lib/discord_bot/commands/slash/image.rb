@@ -69,7 +69,7 @@ module DiscordBot
               "Generated an image requested by #{command.user.mention}:\n" \
               "#{image.about}"
             command.send_image(
-              image: image.file,
+              image:   image.file,
               caption: caption,
               spoiler: image.nsfw?
             )

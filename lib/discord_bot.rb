@@ -70,7 +70,6 @@ module DiscordBot
       autoload :Base,        'discord_bot/commands/user/base'
       autoload :HelloFriend, 'discord_bot/commands/user/hello_friend'
     end
-    
   end
 
   ##

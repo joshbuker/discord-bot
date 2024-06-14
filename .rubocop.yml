@@ -26,6 +26,7 @@ Layout/LineLength:
     - 'subcommand.'
     - 'options.'
     - 'https://'
+    - 'def '
   Max: 80
 # Variable assignment can be indented weirdly, so align to the ending statement
 # instead

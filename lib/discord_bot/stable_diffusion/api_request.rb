@@ -41,12 +41,12 @@ module DiscordBot
           end
 
           payload = {
-            prompt:          image_options.prompt,
-            negative_prompt: image_options.negative_prompt,
-            cfg_scale:       image_options.cfg_scale,
-            steps:           image_options.steps,
-            width:           image_options.width,
-            height:          image_options.height,
+            prompt:            image_options.prompt,
+            negative_prompt:   image_options.negative_prompt,
+            cfg_scale:         image_options.cfg_scale,
+            steps:             image_options.steps,
+            width:             image_options.width,
+            height:            image_options.height,
             override_settings: {
               nudenet_nsfw_censor_enable: false
             }
@@ -74,7 +74,10 @@ module DiscordBot
         # rubocop:enable Metrics/MethodLength
 
         def nsfw_check(input_image:)
-          raise ArgumentError, 'Must provide an input image!' unless input_image.present?
+          unless input_image.present?
+            raise ArgumentError,
+              'Must provide an input image!'
+          end
 
           payload = {
             input_image: input_image

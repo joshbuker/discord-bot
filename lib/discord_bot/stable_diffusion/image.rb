@@ -22,11 +22,12 @@ module DiscordBot
 
       def nsfw?
         return true if @options.force_spoiler
+
         response = DiscordBot::StableDiffusion::ApiRequest.nsfw_check(
           input_image: content
         )
         # If image is present, then it was censored and thus is nsfw
-        JSON.parse(response.body)["image"].present?
+        JSON.parse(response.body)['image'].present?
       end
 
       attr_reader :body, :options
@@ -64,8 +65,10 @@ module DiscordBot
 
       def nsfw_content_warning
         return unless nsfw?
+
         "\n\n**-> CONTENT WARNING <-**\n" \
-        "_This image may contain nsfw content. View only at your own discretion._"
+        '_This image may contain nsfw content. View only at your own ' \
+        'discretion._'
       end
 
       def negative_prompt_details
