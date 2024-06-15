@@ -37,10 +37,14 @@ module DiscordBot
           # FIXME: Clearly too complex
           # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
           def generate_image(command)
+            image_options = DiscordBot::StableDiffusion::ImageOptions.new(
+              command.options
+            )
             unless command.ran_by_admin?
               Logger.info(
                 "#{command.whois} tried running the image generate command " \
-                'without permission'
+                "without permission with the following parameters:\n" \
+                "#{image_options.about}"
               )
               command.respond_with(
                 'This command is restricted to admins until some safeguards ' \
@@ -48,11 +52,22 @@ module DiscordBot
               )
               return
             end
+            # HACK: This should be solved by using server commands instead of
+            #       global commands, rather than checking if ran in a DM
+            if command.direct_message?
+              Logger.info(
+                "#{command.whois} tried running the image generate command " \
+                "in a direct message with the following parameters:\n" \
+                "#{image_options.about}"
+              )
+              command.respond_with(
+                'This command is restricted to servers until some safeguards ' \
+                'have been implemented.'
+              )
+              return
+            end
             Logger.info("Image requested by #{command.whois}")
             command.respond_with('Generating image')
-            image_options = DiscordBot::StableDiffusion::ImageOptions.new(
-              command.options
-            )
             begin
               image = DiscordBot::StableDiffusion::Image.new(
                 image_options: image_options

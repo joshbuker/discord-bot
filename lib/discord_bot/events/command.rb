@@ -32,6 +32,10 @@ module DiscordBot
         DiscordBot::User.new(user: @event.target)
       end
 
+      def direct_message?
+        @event.server_id.nil?
+      end
+
       def ran_by_admin?
         Config.admin_users.include?(user)
       end

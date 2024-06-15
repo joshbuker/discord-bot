@@ -33,11 +33,7 @@ module DiscordBot
       attr_reader :body, :options
 
       def about
-        "**Prompt:**\n```\n#{options.prompt}\n```\n" \
-        "**Negative Prompt:**#{negative_prompt_details}\n" \
-        "**CFG Scale:** `#{options.cfg_scale}` | " \
-        "**Steps:** `#{options.steps}` | " \
-        "**Size:** `#{options.width}x#{options.height}`" \
+        "#{options.about}" \
         "#{nsfw_content_warning}"
       end
 
@@ -69,14 +65,6 @@ module DiscordBot
         "\n\n**-> CONTENT WARNING <-**\n" \
         '_This image may contain nsfw content. View only at your own ' \
         'discretion._'
-      end
-
-      def negative_prompt_details
-        if options.negative_prompt.present?
-          "\n```\n#{options.negative_prompt}\n```"
-        else
-          ' _N/A_'
-        end
       end
     end
   end

@@ -30,6 +30,24 @@ module DiscordBot
         raise ArgumentError, 'Must provide a prompt' if @prompt.empty?
       end
       # rubocop:enable Metrics
+
+      def about
+        "**Prompt:**\n```\n#{prompt}\n```\n" \
+        "**Negative Prompt:**#{negative_prompt_details}\n" \
+        "**CFG Scale:** `#{cfg_scale}` | " \
+        "**Steps:** `#{steps}` | " \
+        "**Size:** `#{width}x#{height}`"
+      end
+
+      private
+
+      def negative_prompt_details
+        if negative_prompt.present?
+          "\n```\n#{negative_prompt}\n```"
+        else
+          ' _N/A_'
+        end
+      end
     end
   end
 end
