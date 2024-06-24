@@ -4,6 +4,8 @@ module DiscordBot
     # Represents a conversation history with the LLM.
     #
     class Conversation
+      attr_reader :current_system_prompt
+
       def initialize(system_prompt: nil)
         @conversation =
           if system_prompt.nil?
@@ -14,6 +16,9 @@ module DiscordBot
               content: system_prompt
             }]
           end
+
+        @current_system_prompt =
+          system_prompt || default_system_prompt[:content]
       end
 
       def append(message:, role: 'user')
@@ -29,16 +34,20 @@ module DiscordBot
         @conversation
       end
 
+      # TODO: Allow setting new system prompt without reseting chat history
       def set_system_prompt(system_prompt:)
         @conversation = [{
           role:    'system',
           content: system_prompt
         }]
+        @current_system_prompt = system_prompt
         system_prompt
       end
 
+      # TODO: Allow reseting system prompt without reseting chat history
       def reset_system_prompt
         @conversation = [default_system_prompt]
+        @current_system_prompt = default_system_prompt[:content]
         default_system_prompt[:content]
       end
 

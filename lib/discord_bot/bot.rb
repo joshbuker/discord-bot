@@ -79,6 +79,10 @@ module DiscordBot
         instance.model(channel_id)
       end
 
+      def current_system_prompt(channel_id:)
+        instance.conversation(channel_id).current_system_prompt
+      end
+
       def reset_system_prompt(channel_id:)
         instance.reset_system_prompt(channel_id: channel_id)
       end

@@ -12,6 +12,7 @@ module DiscordBot
 
           def register
             Bot.register_command(command_name, description) do |command|
+              command.subcommand(:current, 'Show the currently loaded system prompt')
               command.subcommand(:reset, 'Reset to the default system prompt') do |subcommand|
                 subcommand.boolean(:reset_history, 'Should the conversation history be reset?')
               end
@@ -25,6 +26,10 @@ module DiscordBot
           def handle
             Bot.command_callback(command_name) do |event|
               run(DiscordBot::Events::Command.new(event))
+            end
+
+            Bot.command_callback(command_name).subcommand(:current) do |event|
+              print_current_system_prompt(DiscordBot::Events::Command.new(event))
             end
 
             Bot.command_callback(command_name).subcommand(:reset) do |event|
@@ -47,6 +52,15 @@ module DiscordBot
             command.respond_with(
               "System prompt reset to default:\n\n#{default_prompt}",
               only_to_user: false
+            )
+          end
+
+          def print_current_system_prompt(command)
+            Logger.info "#{command.whois} inspected the current system prompt"
+            prompt = Bot.current_system_prompt(channel_id: command.channel_id)
+            command.respond_with(
+              "The currently loaded system prompt for " \
+              "##{command.channel_name} is:\n#{prompt}"
             )
           end
 
