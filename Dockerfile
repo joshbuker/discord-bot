@@ -26,6 +26,7 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 # Copy the application / source into the container
+COPY ./bin ./bin
 COPY ./data ./data
 COPY ./lib ./lib
 COPY LICENSE .
