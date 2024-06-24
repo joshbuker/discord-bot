@@ -20,3 +20,6 @@ RUN ln -s $(which yt-dlp) /usr/local/bin/youtube-dl
 # Ensure we're running the latest bundler, as what ships with the Ruby image may
 # not be current, and bundler will auto-downgrade to match the Gemfile.lock
 RUN gem install bundler
+
+# Needed for VS Code extension `castwide.solargraph`
+RUN gem install solargraph
