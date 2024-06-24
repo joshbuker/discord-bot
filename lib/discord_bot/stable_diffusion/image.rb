@@ -7,6 +7,7 @@ module DiscordBot
       # rubocop:disable Metrics/MethodLength
       def initialize(image_options:)
         @options = image_options
+        time_before = Time.current
         response = if image_options.base_image.present?
                      DiscordBot::StableDiffusion::ApiRequest.image_to_image(
                        image_options: image_options
@@ -16,6 +17,8 @@ module DiscordBot
                        image_options: image_options
                      )
                    end
+        time_after = Time.current
+        @time_taken = time_after - time_before
         @body = JSON.parse(response.body)
       end
       # rubocop:enable Metrics/MethodLength
@@ -34,7 +37,8 @@ module DiscordBot
 
       def about
         "#{options.about}" \
-        "#{nsfw_content_warning}"
+        "#{nsfw_content_warning}" \
+        "\n#{time_taken}"
       end
 
       def content
@@ -58,6 +62,11 @@ module DiscordBot
       end
 
       private
+
+      def time_taken
+        "**Time Taken:** #{@time_taken.round} seconds " \
+        "(#{(@time_taken * 1000).round}ms)"
+      end
 
       def nsfw_content_warning
         return unless nsfw?
