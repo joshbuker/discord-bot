@@ -3,6 +3,15 @@ module DiscordBot
   # Provides a globally accessible configuration for the Bot.
   #
   class Config
+    LOG_LEVELS = {
+      debug: 0,
+      info: 1,
+      warn: 2,
+      error: 3,
+      fatal: 4
+    }
+    DEFAULT_LOG_LEVEL = :info
+
     class << self
       # TODO: Migrate to Slash command permissions?
       def admin_users
@@ -16,7 +25,7 @@ module DiscordBot
       end
 
       def bot_name
-        ENV['BOT_NAME'] || 'Ruby'
+        ENV.fetch('BOT_NAME', 'Ruby')
       end
 
       # TODO: Determine least privilege and request that instead
@@ -34,6 +43,18 @@ module DiscordBot
           933_463_011_551_764_550,
           1_237_136_024_573_051_053
         ]
+      end
+
+      # Some way to log this on bootup? Probably should make Config an instance
+      def log_level
+        level = ENV['LOG_LEVEL']&.downcase&.to_sym || DEFAULT_LOG_LEVEL
+        return level if LOG_LEVELS.key?(level)
+        raise DiscordBot::Errors::InvalidConfig,
+          "Invalid log level provided: #{level}"
+      end
+
+      def log_level?(level)
+        LOG_LEVELS[log_level] <= LOG_LEVELS[level]
       end
     end
   end

@@ -8,5 +8,6 @@ module DiscordBot
     class NotImplementedError < DiscordBot::Error; end
     class FailedToPullModel < DiscordBot::Error; end
     class PermissionDenied < DiscordBot::Error; end
+    class InvalidConfig < DiscordBot::Error; end
   end
 end
