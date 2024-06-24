@@ -10,7 +10,6 @@ services:
     volumes:
       - ${PWD}:/workspaces/discord-bot:cached
     command: sleep infinity
-    # network_mode: service:llm
 
   ollama:
     image: ollama/ollama

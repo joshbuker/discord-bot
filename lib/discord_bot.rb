@@ -120,6 +120,3 @@ module DiscordBot
   autoload :User,   'discord_bot/user'
   # autoload :VERSION, 'discord_bot/version'
 end
-
-# trap('INT') { DiscordBot::Bot.shutdown }
-DiscordBot::Bot.run

@@ -30,4 +30,4 @@ COPY ./data ./data
 COPY ./lib ./lib
 COPY LICENSE .
 
-CMD ["bundle", "exec", "ruby", "lib/discord_bot.rb"]
+CMD ["bundle", "exec", "ruby", "bin/run_bot.rb"]
