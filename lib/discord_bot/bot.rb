@@ -47,6 +47,10 @@ module DiscordBot
         instance.generate_llm_response(channel_id: channel_id, message: message)
       end
 
+      def button_callback(custom_id:)
+        instance.button(custom_id: custom_id)
+      end
+
       def register_command(name, description, &block)
         instance.register_command(name, description, &block)
       end
@@ -157,6 +161,10 @@ module DiscordBot
 
     def voice(identifier)
       @bot.voice(identifier)
+    end
+
+    def button(custom_id:)
+      @bot.button(custom_id: custom_id)
     end
 
     def voice_connect(channel)

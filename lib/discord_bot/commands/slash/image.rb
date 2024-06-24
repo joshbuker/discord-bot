@@ -28,6 +28,17 @@ module DiscordBot
             Bot.command_callback(command_name).subcommand(:generate) do |event|
               generate_image(DiscordBot::Events::Command.new(event))
             end
+
+            Bot.button_callback(custom_id: /^test_button:/) do |event|
+              num = event.interaction.button.custom_id.split(':')[1].to_i
+
+              event.update_message(content: num.to_s) do |_, view|
+                view.row do |row|
+                  row.button(label: '-', style: :danger, custom_id: "test_button:#{num - 1}")
+                  row.button(label: '+', style: :success, custom_id: "test_button:#{num + 1}")
+                end
+              end
+            end
           end
 
           def description
@@ -88,7 +99,11 @@ module DiscordBot
               caption: caption,
               spoiler: image.nsfw?
             )
-            command.update_response('Image sent')
+            command.update_response('Image sent') do |_, view|
+              view.row do |row|
+                row.button(label: 'Testing', style: :primary, emoji: 1206653956219080794, custom_id: 'test_button:1')
+              end
+            end
             Logger.info(
               "Sent image with the following options:\n#{image.about}"
             )
