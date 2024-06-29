@@ -1,6 +1,6 @@
 module DiscordBot
   ##
-  # Provides a globally accessible configuration for the Bot.
+  # Allows overwriting various settings for the Bot
   #
   class Config
     LOG_LEVELS = {
@@ -11,50 +11,73 @@ module DiscordBot
       fatal: 4
     }
     DEFAULT_LOG_LEVEL = :info
+    DEFAULT_ADMIN_USER_IDS = [
+      121_475_289_397_198_848,
+      227_141_869_962_919_936,
+      381_899_834_564_804_622,
+      478_093_835_172_446_209,
+      722_652_181_894_791_238
+    ]
+    DEFAULT_SLASH_COMMAND_SERVER_IDS = [
+      933_463_011_551_764_550,
+      1_237_136_024_573_051_053
+    ]
 
-    class << self
-      # TODO: Migrate to Slash command permissions?
-      def admin_users
-        [
-          DiscordBot::User.new(id: 121_475_289_397_198_848),
-          DiscordBot::User.new(id: 227_141_869_962_919_936),
-          DiscordBot::User.new(id: 381_899_834_564_804_622),
-          DiscordBot::User.new(id: 478_093_835_172_446_209),
-          DiscordBot::User.new(id: 722_652_181_894_791_238)
-        ]
+    attr_reader :admin_user_ids, :bot_name, :discord_bot_token,
+      :slash_command_server_ids, :fast_boot, :skip_motd, :options
+
+    # rubocop:disable Layout/LineLength
+    def initialize(**options)
+      @options = options
+      # TODO: Migrate admin users to Slash command permissions?
+      @admin_user_ids = settings(options, :admin_user_ids, DEFAULT_ADMIN_USER_IDS)
+      @bot_name = settings(options, :bot_name, 'Ruby')
+      @discord_bot_token = settings(options, :discord_bot_token)
+      @slash_command_server_ids = settings(options, :slash_command_server_ids, DEFAULT_SLASH_COMMAND_SERVER_IDS)
+      @fast_boot = settings(options, :fast_boot, false)
+      @skip_motd = settings(options, :skip_motd, false)
+    end
+    # rubocop:enable Layout/LineLength
+
+    # TODO: Determine least privilege and request that instead
+    def discord_bot_intents
+      if !options[:discord_bot_intents].nil?
+        options[:discord_bot_intents]
+      else
+        fetch_intents_from_env(:all)
       end
+    end
 
-      def bot_name
-        ENV.fetch('BOT_NAME', 'Ruby')
-      end
+    def log_file_path
+      '/var/log/ruby_discord_bot.log'
+    end
 
-      # TODO: Determine least privilege and request that instead
-      def discord_bot_intents
-        :all
-        # [:server_messages]
-      end
+    # Some way to log this on bootup? Probably should make Config an instance
+    def log_level
+      @level ||= options[:log_level] || ENV['LOG_LEVEL']&.downcase&.to_sym || DEFAULT_LOG_LEVEL
+      return @level if LOG_LEVELS.key?(@level)
+      raise DiscordBot::Errors::InvalidConfig,
+        "Invalid log level provided: #{@level}"
+    end
 
-      def discord_bot_token
-        ENV.fetch('RUBY_DISCORD_BOT_TOKEN', nil)
-      end
+    def log_level?(level)
+      LOG_LEVELS[log_level] <= LOG_LEVELS[level]
+    end
 
-      def slash_command_server_ids
-        [
-          933_463_011_551_764_550,
-          1_237_136_024_573_051_053
-        ]
-      end
+    private
 
-      # Some way to log this on bootup? Probably should make Config an instance
-      def log_level
-        level = ENV['LOG_LEVEL']&.downcase&.to_sym || DEFAULT_LOG_LEVEL
-        return level if LOG_LEVELS.key?(level)
-        raise DiscordBot::Errors::InvalidConfig,
-          "Invalid log level provided: #{level}"
-      end
+    def fetch_intents_from_env(default)
+      intents =
+        ENV['DISCORD_BOT_INTENTS'].to_s.delete(' []:').split(',').map(&:to_sym)
+      return intents if intents.present?
+      default
+    end
 
-      def log_level?(level)
-        LOG_LEVELS[log_level] <= LOG_LEVELS[level]
+    def settings(options, key, default = nil)
+      if !options[key].nil?
+        options[key]
+      else
+        ENV.fetch(key.to_s.underscore.upcase, default)
       end
     end
   end

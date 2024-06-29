@@ -1,7 +1,7 @@
 module DiscordBot
   module StableDiffusion
     ##
-    # Provides access to the LLM via REST API Requests.
+    # Provides access to Stable Diffusion via REST API Requests.
     #
     class ApiRequest
       DEFAULT_HEADERS = {

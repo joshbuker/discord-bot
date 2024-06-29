@@ -5,18 +5,18 @@ module DiscordBot
       # Command for shutting down the bot.
       #
       class Exit < Base
-        class << self
-          def description
-            'Shutdown the bot'
-          end
+        def description
+          'Shutdown the bot'
+        end
 
-          def run(command)
-            return unless command.ran_by_admin?
+        def run(command_event)
+          require_admin!(command_event){ return }
 
-            command.respond_with 'Shutting down, see you next time!'
-            Logger.info "Shutting down per request by #{command.user.name}"
-            Bot.shutdown
-          end
+          command_event.respond_with 'Shutting down, see you next time!'
+          logger.warn(
+            "Shutting down per request by #{command_event.user.name}"
+          )
+          bot.shutdown
         end
       end
     end

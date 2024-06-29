@@ -5,23 +5,38 @@ module DiscordBot
       # Provides a base class for message commands.
       #
       class Base
-        class << self
-          def register
-            # Logger.info "Registering #{command_name} command"
-            Bot.register_message_command(command_name)
-          end
+        def initialize(bot)
+          @bot = bot
+        end
 
-          def handle
-            # Logger.info "Registering #{command_name} command callback"
-            Bot.command_callback(command_name.to_sym) do |event|
-              run(DiscordBot::Events::Command.new(event))
-            end
-          end
+        def register
+          logger.debug "Registering \"#{command_name}\" message command"
+          bot.discord_bot.register_application_command(
+            command_name,
+            type: :message
+          )
+        end
 
-          def command_name
-            name.demodulize.titlecase
+        def handle
+          logger.debug(
+            "Registering \"#{command_name}\" message command callback"
+          )
+          bot.discord_bot.application_command(command_name.to_sym) do |event|
+            run(DiscordBot::Events::Command.new(event))
           end
         end
+
+        def run(command_event)
+          raise NotImplementedError
+        end
+
+        def command_name
+          name.demodulize.titlecase
+        end
+
+        protected
+
+        attr_reader :bot
       end
     end
   end

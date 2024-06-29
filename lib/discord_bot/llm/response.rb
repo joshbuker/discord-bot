@@ -10,28 +10,28 @@ module DiscordBot
         @model = model
 
         if user_message.is_a?(String)
-          conversation_history.append(
+          conversation_history.append(ChatMessage.new(
             role:    'user',
-            message: user_message
-          )
+            content: user_message
+          ))
         else
-          conversation_history.append(
+          conversation_history.append(ChatMessage.new(
             role:    'user',
-            message: adjusted_user_message(user_message)
-          )
+            content: adjusted_user_message(user_message)
+          ))
         end
 
-        Logger.info 'Requesting LLM Response'
+        logger.info 'Requesting LLM Response'
         response = DiscordBot::LLM::ApiRequest.chat(
           messages:   conversation_history.messages,
           model_name: model.name
         )
         @body = JSON.parse(response.body)
 
-        conversation_history.append(
+        conversation_history.append(ChatMessage.new(
           role:    'assistant',
-          message: message
-        )
+          content: message
+        ))
       end
       # rubocop:enable Metrics/MethodLength
 

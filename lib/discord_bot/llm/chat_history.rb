@@ -1,41 +1,44 @@
 module DiscordBot
   module LLM
     ##
-    # Represents a conversation history with the LLM.
+    # Represents a chat history with the LLM.
     #
-    class Conversation
+    class ChatHistory
       attr_reader :messages
 
       def initialize(system_prompt: default_system_prompt)
         @messages = []
-        current_system_prompt = system_prompt
+        self.system_prompt = system_prompt
       end
 
-      def append(message:, role: 'user')
-        @messages.push(ChatMessage.new(role: role, content: message))
+      def append(chat_message)
+        raise ArgumentError unless chat_message.is_a?(ChatMessage)
+
+        @messages.push(chat_message)
       end
 
-      def current_system_prompt
+      def system_prompt
         return default_system_prompt if @messages.empty?
         @messages.first.content
       end
 
-      def current_system_prompt=(system_prompt)
-        @messages.first = ChatMessage.new(
+      def system_prompt=(system_prompt)
+        @messages[0] = ChatMessage.new(
           role:    'system',
           content: system_prompt
         )
-        current_system_prompt
+        self.system_prompt
       end
 
       def reset_history
-        previous_prompt = current_system_prompt
+        previous_prompt = system_prompt
         @messages.clear
-        current_system_prompt = previous_prompt
+        self.system_prompt = previous_prompt
+        true
       end
 
       def reset_system_prompt
-        current_system_prompt = default_system_prompt
+        self.system_prompt = default_system_prompt
       end
 
       private

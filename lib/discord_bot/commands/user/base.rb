@@ -5,22 +5,52 @@ module DiscordBot
       # Base class for User commands.
       #
       class Base
-        class << self
-          def register
-            # Logger.info "Registering #{command_name} command"
-            Bot.register_user_command(command_name)
-          end
+        def initialize(bot)
+          @bot = bot
+        end
 
-          def handle
-            # Logger.info "Registering #{command_name} command callback"
-            Bot.command_callback(command_name.to_sym) do |event|
-              run(DiscordBot::Events::Command.new(event))
-            end
-          end
+        def register
+          logger.debug "Registering \"#{command_name}\" user command"
+          bot.discord_bot.register_application_command(
+            command_name,
+            type: :user
+          )
+        end
 
-          def command_name
-            name.demodulize.titlecase
+        def handle
+          logger.debug "Registering \"#{command_name}\" user command callback"
+          bot.discord_bot.application_command(command_name.to_sym) do |event|
+            run(DiscordBot::Events::Command.new(event))
           end
+        end
+
+        def run(command_event)
+          raise NotImplementedError
+        end
+
+        def command_name
+          name.demodulize.titlecase
+        end
+
+        protected
+
+        attr_reader :bot
+
+        def require_admin!(command_event, reason = '')
+          return if command_event.ran_by_admin?
+
+          logger.warn(
+            "#{command_event.whois} tried running the " \
+            "#{command_event.command_name} command without permission"
+          )
+          if reason.present?
+            command_event.respond_with(reason)
+          else
+            command_event.respond_with(
+              'This command is restricted to admins!'
+            )
+          end
+          yield
         end
       end
     end

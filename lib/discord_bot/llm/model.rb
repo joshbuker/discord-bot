@@ -14,6 +14,12 @@ module DiscordBot
         end
       end
 
+      def self.pull_default_model
+        self.new(model_name: DiscordBot::LLM::DEFAULT_MODEL).pull
+      rescue DiscordBot::Errors::FailedToPullModel => e
+        logger.error e.message
+      end
+
       def initialize(model_name: nil)
         @name = if model_name.nil?
                   DiscordBot::LLM::DEFAULT_MODEL
