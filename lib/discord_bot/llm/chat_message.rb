@@ -8,7 +8,7 @@ module DiscordBot
       # FIXME: I'm not super happy with this guard clause
       def initialize(role:, content:)
         unless VALID_ROLES.include?(role)
-          raise InvalidArgument,
+          raise ArgumentError,
             "Invalid role of #{role}, valid options are: " \
             "#{VALID_ROLES.join(', ')}"
         end

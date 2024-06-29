@@ -32,11 +32,26 @@ module DiscordBot
   # messages.
   #
   module Commands
+    # REVIEW: Is this file the best place for these methods to live?
+    def all_commands(bot)
+      [
+        DiscordBot::Commands::Message.all_commands(bot),
+        DiscordBot::Commands::Slash.all_commands(bot),
+        DiscordBot::Commands::User.all_commands(bot)
+      ].flatten
+    end
+
     ##
     # Message commands that take no parameters, but include the message that the
     # command was ran against.
     #
     module Message
+      def all_commands(bot)
+        [
+          DiscordBot::Commands::Message::ReplyToMessage.new(bot)
+        ]
+      end
+
       autoload :Base,           'discord_bot/commands/message/base'
       autoload :ReplyToMessage, 'discord_bot/commands/message/reply_to_message'
     end
@@ -50,6 +65,19 @@ module DiscordBot
     # - `/voice youtube <url>`
     #
     module Slash
+      def all_commands(bot)
+        [
+          DiscordBot::Commands::Slash::Exit.new(bot),
+          DiscordBot::Commands::Slash::Help.new(bot),
+          DiscordBot::Commands::Slash::Image.new(bot),
+          DiscordBot::Commands::Slash::Model.new(bot),
+          DiscordBot::Commands::Slash::NiceMessage.new(bot),
+          DiscordBot::Commands::Slash::Source.new(bot),
+          DiscordBot::Commands::Slash::SystemPrompt.new(bot),
+          DiscordBot::Commands::Slash::Voice.new(bot)
+        ]
+      end
+
       autoload :Base,         'discord_bot/commands/slash/base'
       autoload :Exit,         'discord_bot/commands/slash/exit'
       autoload :Help,         'discord_bot/commands/slash/help'
@@ -67,6 +95,12 @@ module DiscordBot
     # command was ran against.
     #
     module User
+      def all_commands(bot)
+        [
+          DiscordBot::Commands::User::HelloFriend.new(bot)
+        ]
+      end
+
       autoload :Base,        'discord_bot/commands/user/base'
       autoload :HelloFriend, 'discord_bot/commands/user/hello_friend'
     end
@@ -92,6 +126,7 @@ module DiscordBot
     DEFAULT_MODEL = ENV['DEFAULT_LLM_MODEL'] || 'llama3'
 
     autoload :ApiRequest,   'discord_bot/llm/api_request'
+    autoload :ChatMessage,  'discord_bot/llm/chat_message'
     autoload :Conversation, 'discord_bot/llm/conversation'
     autoload :Model,        'discord_bot/llm/model'
     autoload :Response,     'discord_bot/llm/response'
@@ -110,6 +145,17 @@ module DiscordBot
     autoload :ApiRequest,   'discord_bot/stable_diffusion/api_request'
     autoload :ImageOptions, 'discord_bot/stable_diffusion/image_options'
     autoload :Image,        'discord_bot/stable_diffusion/image'
+  end
+
+  module MeloTTS
+    API_PROTOCOL  = ENV['MELOTTS_SERVICE_PROTOCOL'] || 'http://'
+    API_HOST      = ENV['MELOTTS_SERVICE_NAME'] || 'localhost'
+    API_PORT      = ENV['MELOTTS_SERVICE_PORT'] || '8080'
+    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+
+    autoload :ApiRequest, 'discord_bot/melotts/api_request'
+    autoload :VoiceOptions, 'discord_bot/melotts/voice_options'
+    autoload :Voice, 'discord_bot/melotts/voice'
   end
 
   autoload :Bot,    'discord_bot/bot'

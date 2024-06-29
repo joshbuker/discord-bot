@@ -3,16 +3,14 @@ module DiscordBot
   # Wrapper around the User object
   #
   class User
-    def initialize(id: nil, user: nil)
-      if user
-        @user = user
-      elsif id
-        @user = Bot.find_user_by_id(id)
-      end
+    def initialize(user)
+      raise ArgumentError, 'Invalid user' unless user.present?
 
-      return unless @user.nil?
+      @user = user
+    end
 
-      raise ArgumentError, 'Invalid user'
+    def self.find_user_by_id(bot:, id:)
+      new(bot.discord_bot.user(id))
     end
 
     def whois

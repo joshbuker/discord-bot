@@ -12,6 +12,14 @@ module DiscordBot
     }
     DEFAULT_LOG_LEVEL = :info
 
+    def initialize(**options)
+
+    end
+
+    def log_file
+      '/var/log/ruby_discord_bot.log'
+    end
+
     class << self
       # TODO: Migrate to Slash command permissions?
       def admin_users

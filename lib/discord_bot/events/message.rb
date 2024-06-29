@@ -51,7 +51,7 @@ module DiscordBot
       end
 
       def mentions_bot?
-        @event.message.mentions.include?(Bot.user)
+        @event.message.mentions.include?(@event.bot.bot_user)
       end
 
       def direct_message?
