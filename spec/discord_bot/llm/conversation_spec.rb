@@ -14,9 +14,9 @@ RSpec.describe DiscordBot::LLM::Conversation do
     end
 
     it 'rejects strings' do
-      expect{
+      expect do
         conversation.append('Some message')
-      }.to raise_error(ArgumentError)
+      end.to raise_error(ArgumentError)
     end
   end
 

@@ -61,7 +61,7 @@ RSpec.configure do |config|
 
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options.
-  config.example_status_persistence_file_path = "tmp/rspec_example_status.txt"
+  config.example_status_persistence_file_path = 'tmp/rspec_example_status.txt'
 
   # Limits the available syntax to the non-monkey patched syntax that is
   # recommended. For more details, see:
@@ -76,7 +76,7 @@ RSpec.configure do |config|
   config.raise_errors_for_deprecations!
 
   # Use verbose output formatting when running a single file
-  config.default_formatter = "doc" if config.files_to_run.one?
+  config.default_formatter = 'doc' if config.files_to_run.one?
 
   # Find slow specs by running `PROFILING=true rspec`
   config.profile_examples = 5 if ENV['PROFILING'] == 'true'

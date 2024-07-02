@@ -4,38 +4,33 @@ module DiscordBot
     # Processes a chat, and provides the LLM Response
     #
     class Response
-      # FIXME: Complexity
-      # rubocop:disable Metrics/MethodLength
-      def initialize(conversation_history:, user_message:, model:)
+      attr_reader :chat_history, :model, :bot, :logger, :body
+
+      def self.create(chat_history:, model:, bot:)
+        response = new(
+          chat_history: chat_history,
+          model: model,
+          bot: bot
+        )
+        response.generate
+      end
+
+      def initialize(chat_history:, model:, bot:)
+        @chat_history = chat_history
         @model = model
+        @bot = bot
+        @logger = bot.logger
+      end
 
-        if user_message.is_a?(String)
-          conversation_history.append(ChatMessage.new(
-            role:    'user',
-            content: user_message
-          ))
-        else
-          conversation_history.append(ChatMessage.new(
-            role:    'user',
-            content: adjusted_user_message(user_message)
-          ))
-        end
-
+      def generate
         logger.info 'Requesting LLM Response'
         response = DiscordBot::LLM::ApiRequest.chat(
-          messages:   conversation_history.messages,
+          messages:   chat_history.messages,
           model_name: model.name
         )
         @body = JSON.parse(response.body)
-
-        conversation_history.append(ChatMessage.new(
-          role:    'assistant',
-          content: message
-        ))
+        self
       end
-      # rubocop:enable Metrics/MethodLength
-
-      attr_reader :model
 
       def message
         @body['message']['content']
