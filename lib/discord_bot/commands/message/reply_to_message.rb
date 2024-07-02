@@ -19,8 +19,8 @@ module DiscordBot
           command_event.respond_with('Replying to message...')
           response =
             bot.conversation(message.channel_id).generate_response(message)
-          command_event.update_response('Reply sent')
           message.reply_with(response.message)
+          command_event.update_response('Reply sent')
         end
       end
     end

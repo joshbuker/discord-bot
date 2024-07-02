@@ -1,32 +1,9 @@
 module DiscordBot
-  module StableDiffusion
-    ##
-    # Provides access to Stable Diffusion via REST API Requests.
-    #
-    class ApiRequest
-      DEFAULT_HEADERS = {
-        content_type: :json,
-        accept:       :json
-      }.freeze
-
-      class << self
-        def get(endpoint, headers = DEFAULT_HEADERS, timeout = nil)
-          RestClient::Request.execute(
-            method:  :get,
-            url:     "#{DiscordBot::StableDiffusion::API_URL}#{endpoint}",
-            headers: headers,
-            timeout: timeout
-          )
-        end
-
-        def post(endpoint, payload, headers = DEFAULT_HEADERS, timeout = nil)
-          RestClient::Request.execute(
-            method:  :post,
-            url:     "#{DiscordBot::StableDiffusion::API_URL}#{endpoint}",
-            payload: payload,
-            headers: headers,
-            timeout: timeout
-          )
+  module Api
+    module Services
+      class Automatic1111 < DiscordBot::Api::Request
+        def default_api_url
+          DiscordBot::StableDiffusion::API_URL
         end
 
         def list_local_models
@@ -40,6 +17,7 @@ module DiscordBot
               'Must provide a prompt!'
           end
 
+          # TODO: Refactor to image_options.to_payload
           payload = {
             prompt:            image_options.prompt,
             negative_prompt:   image_options.negative_prompt,

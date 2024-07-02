@@ -8,6 +8,7 @@ module DiscordBot
     def initialize(config: default_config, discord_bot: nil)
       @config = config
       @channel_conversations = {}
+      @api = DiscordBot::Api::Interface.new(self)
       @logger = DiscordBot::Logger.new(self)
       @discord_bot = discord_bot || Discordrb::Bot.new(
         token: config.discord_bot_token || 'invalid',
