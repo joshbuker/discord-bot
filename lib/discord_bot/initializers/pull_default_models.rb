@@ -8,7 +8,7 @@ module DiscordBot
         !bot.config.fast_boot
       end
 
-      def setup(bot)
+      def setup
         logger.info 'Pulling default models'
         DiscordBot::LLM::Model.pull_default_model
       end

@@ -33,7 +33,7 @@ module DiscordBot
   #
   module Commands
     # REVIEW: Is this file the best place for these methods to live?
-    def all_commands(bot)
+    def self.all_commands(bot)
       [
         DiscordBot::Commands::Message.all_commands(bot),
         DiscordBot::Commands::Slash.all_commands(bot),
@@ -46,7 +46,7 @@ module DiscordBot
     # command was ran against.
     #
     module Message
-      def all_commands(bot)
+      def self.all_commands(bot)
         [
           DiscordBot::Commands::Message::ReplyToMessage.new(bot)
         ]
@@ -65,7 +65,7 @@ module DiscordBot
     # - `/voice youtube <url>`
     #
     module Slash
-      def all_commands(bot)
+      def self.all_commands(bot)
         [
           DiscordBot::Commands::Slash::Exit.new(bot),
           DiscordBot::Commands::Slash::Help.new(bot),
@@ -95,7 +95,7 @@ module DiscordBot
     # command was ran against.
     #
     module User
-      def all_commands(bot)
+      def self.all_commands(bot)
         [
           DiscordBot::Commands::User::HelloFriend.new(bot)
         ]
@@ -116,6 +116,16 @@ module DiscordBot
   end
 
   ##
+  # Initializers to setup the bot
+  #
+  module Initializers
+    autoload :InitializeCallbacks, 'discord_bot/initializers/initialize_callbacks'
+    autoload :MessageOfTheDay, 'discord_bot/initializers/message_of_the_day'
+    autoload :PullDefaultModels, 'discord_bot/initializers/pull_default_models'
+    autoload :RefreshCommands, 'discord_bot/initializers/refresh_commands'
+  end
+
+  ##
   # Contains everything needed to interact with the LLM via Ollama.
   #
   module LLM
@@ -127,9 +137,20 @@ module DiscordBot
 
     autoload :ApiRequest,   'discord_bot/llm/api_request'
     autoload :ChatMessage,  'discord_bot/llm/chat_message'
-    autoload :Conversation, 'discord_bot/llm/conversation'
+    autoload :ChatHistory,  'discord_bot/llm/chat_history'
     autoload :Model,        'discord_bot/llm/model'
     autoload :Response,     'discord_bot/llm/response'
+  end
+
+  module MeloTTS
+    API_PROTOCOL  = ENV['MELOTTS_SERVICE_PROTOCOL'] || 'http://'
+    API_HOST      = ENV['MELOTTS_SERVICE_NAME'] || 'localhost'
+    API_PORT      = ENV['MELOTTS_SERVICE_PORT'] || '8080'
+    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+
+    autoload :ApiRequest, 'discord_bot/melotts/api_request'
+    autoload :VoiceOptions, 'discord_bot/melotts/voice_options'
+    autoload :Voice, 'discord_bot/melotts/voice'
   end
 
   ##
@@ -147,22 +168,46 @@ module DiscordBot
     autoload :Image,        'discord_bot/stable_diffusion/image'
   end
 
-  module MeloTTS
-    API_PROTOCOL  = ENV['MELOTTS_SERVICE_PROTOCOL'] || 'http://'
-    API_HOST      = ENV['MELOTTS_SERVICE_NAME'] || 'localhost'
-    API_PORT      = ENV['MELOTTS_SERVICE_PORT'] || '8080'
-    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+  module Subcommands
+    module Image
+      autoload :Generate, 'discord_bot/subcommands/image/generate'
+    end
 
-    autoload :ApiRequest, 'discord_bot/melotts/api_request'
-    autoload :VoiceOptions, 'discord_bot/melotts/voice_options'
-    autoload :Voice, 'discord_bot/melotts/voice'
+    module Model
+      autoload :Current, 'discord_bot/subcommands/model/current'
+      autoload :List, 'discord_bot/subcommands/model/list'
+      autoload :Pull, 'discord_bot/subcommands/model/pull'
+      autoload :Reset, 'discord_bot/subcommands/model/reset'
+      autoload :Set, 'discord_bot/subcommands/model/set'
+    end
+
+    module SystemPrompt
+      autoload :Current, 'discord_bot/subcommands/system_prompt/current'
+      autoload :Reset, 'discord_bot/subcommands/system_prompt/reset'
+      autoload :Set, 'discord_bot/subcommands/system_prompt/set'
+    end
+
+    module Voice
+      autoload :Connect, 'discord_bot/subcommands/voice/connect'
+      autoload :Disconnect, 'discord_bot/subcommands/voice/disconnect'
+      autoload :Generate, 'discord_bot/subcommands/voice/generate'
+      autoload :Speak, 'discord_bot/subcommands/voice/speak'
+      autoload :Stop, 'discord_bot/subcommands/voice/stop'
+      autoload :Tuturu, 'discord_bot/subcommands/voice/tuturu'
+      autoload :Youtube, 'discord_bot/subcommands/voice/youtube'
+    end
   end
 
-  autoload :Bot,    'discord_bot/bot'
-  autoload :Config, 'discord_bot/config'
-  autoload :Error,  'discord_bot/errors'
-  autoload :Errors, 'discord_bot/errors'
-  autoload :Logger, 'discord_bot/logger'
-  autoload :User,   'discord_bot/user'
+  autoload :Bot,            'discord_bot/bot'
+  autoload :Command,        'discord_bot/command'
+  autoload :Config,         'discord_bot/config'
+  autoload :Conversation,   'discord_bot/conversation'
+  autoload :Error,          'discord_bot/errors'
+  autoload :Errors,         'discord_bot/errors'
+  autoload :Initializer,    'discord_bot/initializer'
+  autoload :Logger,         'discord_bot/logger'
+  autoload :MessageHandler, 'discord_bot/message_handler'
+  autoload :Subcommand,     'discord_bot/subcommand'
+  autoload :User,           'discord_bot/user'
   # autoload :VERSION, 'discord_bot/version'
 end

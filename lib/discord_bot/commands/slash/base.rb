@@ -4,14 +4,7 @@ module DiscordBot
       ##
       # Base class for slash commands
       #
-      class Base
-        attr_reader :bot, :logger
-
-        def initialize(bot)
-          @bot = bot
-          @logger = bot.logger
-        end
-
+      class Base < DiscordBot::Command
         def register
           logger.debug "Registering /#{command_name} command"
           bot.discord_bot.register_application_command(
@@ -40,7 +33,7 @@ module DiscordBot
         end
 
         def command_name
-          name.demodulize.underscore.to_sym
+          self.class.name.demodulize.underscore.to_sym
         end
 
         def description

@@ -1,9 +1,10 @@
 module DiscordBot
   class Initializer
-    attr_reader :bot
+    attr_reader :bot, :logger
 
     def initialize(bot)
       @bot = bot
+      @logger = bot.logger
     end
 
     def run?

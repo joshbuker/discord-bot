@@ -22,20 +22,22 @@ module DiscordBot
       933_463_011_551_764_550,
       1_237_136_024_573_051_053
     ]
+    DEFAULT_LOG_FILE_PATH = '/var/log/ruby_discord_bot.log'
 
-    attr_reader :admin_user_ids, :bot_name, :discord_bot_token,
+    attr_reader :admin_user_ids, :bot_name, :discord_bot_token, :log_file_path,
       :slash_command_server_ids, :fast_boot, :skip_motd, :options
 
     # rubocop:disable Layout/LineLength
     def initialize(**options)
       @options = options
       # TODO: Migrate admin users to Slash command permissions?
-      @admin_user_ids = settings(options, :admin_user_ids, DEFAULT_ADMIN_USER_IDS)
-      @bot_name = settings(options, :bot_name, 'Ruby')
-      @discord_bot_token = settings(options, :discord_bot_token)
-      @slash_command_server_ids = settings(options, :slash_command_server_ids, DEFAULT_SLASH_COMMAND_SERVER_IDS)
-      @fast_boot = settings(options, :fast_boot, false)
-      @skip_motd = settings(options, :skip_motd, false)
+      @admin_user_ids = settings(:admin_user_ids, DEFAULT_ADMIN_USER_IDS)
+      @bot_name = settings(:bot_name, 'Ruby')
+      @discord_bot_token = settings(:discord_bot_token)
+      @slash_command_server_ids = settings(:slash_command_server_ids, DEFAULT_SLASH_COMMAND_SERVER_IDS)
+      @fast_boot = settings(:fast_boot, false)
+      @skip_motd = settings(:skip_motd, false)
+      @log_file_path = settings(:log_file_path, DEFAULT_LOG_FILE_PATH)
     end
     # rubocop:enable Layout/LineLength
 
@@ -46,10 +48,6 @@ module DiscordBot
       else
         fetch_intents_from_env(:all)
       end
-    end
-
-    def log_file_path
-      '/var/log/ruby_discord_bot.log'
     end
 
     # Some way to log this on bootup? Probably should make Config an instance
@@ -73,7 +71,7 @@ module DiscordBot
       default
     end
 
-    def settings(options, key, default = nil)
+    def settings(key, default = nil)
       if !options[key].nil?
         options[key]
       else

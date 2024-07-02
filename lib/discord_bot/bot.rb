@@ -5,21 +5,18 @@ module DiscordBot
   class Bot
     attr_reader :config, :discord_bot, :logger
 
-    def initialize(config:)
+    def initialize(config: default_config, discord_bot: nil)
       @config = config
       @channel_conversations = {}
       @logger = DiscordBot::Logger.new(self)
+      @discord_bot = discord_bot || Discordrb::Bot.new(
+        token: config.discord_bot_token || 'invalid',
+        intents: config.discord_bot_intents
+      )
     end
 
     def conversation(channel_id)
       @channel_conversations[channel_id] ||= DiscordBot::Conversation.new(self)
-    end
-
-    def discord_bot
-      @discord_bot ||= Discordrb::Bot.new(
-        token: config.discord_bot_token,
-        intents: config.discord_bot_intents
-      )
     end
 
     def commands
@@ -29,7 +26,7 @@ module DiscordBot
     def run
       setup_bot
       start_bot
-    rescue Interrupt => e
+    rescue Interrupt
       shutdown
     end
 
@@ -60,6 +57,10 @@ module DiscordBot
     def shutdown
       logger.info 'Shutting down'
       discord_bot.stop
+    end
+
+    def default_config
+      DiscordBot::Config.new
     end
   end
 end

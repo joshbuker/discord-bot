@@ -4,11 +4,7 @@ module DiscordBot
       ##
       # Provides a base class for message commands.
       #
-      class Base
-        def initialize(bot)
-          @bot = bot
-        end
-
+      class Base < DiscordBot::Command
         def register
           logger.debug "Registering \"#{command_name}\" message command"
           bot.discord_bot.register_application_command(

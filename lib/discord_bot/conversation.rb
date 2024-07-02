@@ -4,7 +4,9 @@ module DiscordBot
 
     def initialize(bot)
       @bot = bot
-      @chat_history = DiscordBot::LLM::ChatHistory.new
+      @chat_history = DiscordBot::LLM::ChatHistory.new(
+        bot_name: bot.config.bot_name
+      )
       @model = DiscordBot::LLM::Model.new
     end
 

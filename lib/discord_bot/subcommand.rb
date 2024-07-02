@@ -32,7 +32,7 @@ module DiscordBot
     end
 
     def command_name
-      name.demodulize.underscore.to_sym
+      self.class.name.demodulize.underscore.to_sym
     end
 
     def description

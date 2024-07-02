@@ -13,76 +13,58 @@ RSpec.describe DiscordBot::Config do
   # to...This mess.
   describe 'log_level?' do
     context 'when log level is :debug' do
-      let(:config) { described_class.new(log_level: :debug) }
+      subject(:config) { described_class.new(log_level: :debug) }
 
       [:debug, :info, :warn, :error, :fatal].each do |log_level|
-        it "returns true for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_truthy
-        end
+        it { should be_log_level(log_level) }
       end
     end
 
     context 'when log level is :info' do
-      let(:config) { described_class.new(log_level: :info) }
+      subject(:config) { described_class.new(log_level: :info) }
 
       [:info, :warn, :error, :fatal].each do |log_level|
-        it "returns true for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_truthy
-        end
+        it { should be_log_level(log_level) }
       end
 
       [:debug].each do |log_level|
-        it "returns false for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_falsey
-        end
+        it { should_not be_log_level(log_level) }
       end
     end
 
     context 'when log level is :warn' do
-      let(:config) { described_class.new(log_level: :warn) }
+      subject(:config) { described_class.new(log_level: :warn) }
 
       [:warn, :error, :fatal].each do |log_level|
-        it "returns true for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_truthy
-        end
+        it { should be_log_level(log_level) }
       end
 
       [:debug, :info].each do |log_level|
-        it "returns false for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_falsey
-        end
+        it { should_not be_log_level(log_level) }
       end
     end
 
     context 'when log level is :error' do
-      let(:config) { described_class.new(log_level: :error) }
+      subject(:config) { described_class.new(log_level: :error) }
 
       [:error, :fatal].each do |log_level|
-        it "returns true for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_truthy
-        end
+        it { should be_log_level(log_level) }
       end
 
       [:debug, :info, :warn].each do |log_level|
-        it "returns false for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_falsey
-        end
+        it { should_not be_log_level(log_level) }
       end
     end
 
     context 'when log level is :fatal' do
-      let(:config) { described_class.new(log_level: :fatal) }
+      subject(:config) { described_class.new(log_level: :fatal) }
 
       [:fatal].each do |log_level|
-        it "returns true for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_truthy
-        end
+        it { should be_log_level(log_level) }
       end
 
       [:debug, :info, :warn, :error].each do |log_level|
-        it "returns false for #{log_level}" do
-          expect(config.log_level?(log_level)).to be_falsey
-        end
+        it { should_not be_log_level(log_level) }
       end
     end
   end
@@ -100,21 +82,22 @@ RSpec.describe DiscordBot::Config do
       DiscordBot::Config::DEFAULT_SLASH_COMMAND_SERVER_IDS,
       [1234]
     ],
-    [:log_level, DiscordBot::Config::DEFAULT_LOG_LEVEL, :debug]
+    [:log_level, DiscordBot::Config::DEFAULT_LOG_LEVEL, :debug],
+    [:log_file_path, DiscordBot::Config::DEFAULT_LOG_FILE_PATH, 'example.log']
   ].each do |config_key, default_value, custom_value|
-    it { is_expected.to respond_to config_key }
+    it { should respond_to config_key }
 
     describe config_key.to_s do
       subject(config_key) { config.public_send(config_key.to_s) }
 
       context 'when using default value' do
-        it { is_expected.to eq(default_value) }
+        it { should eq(default_value) }
       end
 
       context 'when overwritten with options' do
         let(:config) { described_class.new(config_key => custom_value) }
 
-        it { is_expected.to eq(custom_value) }
+        it { should eq(custom_value) }
       end
 
       context 'when overwritten with ENV' do
@@ -127,7 +110,7 @@ RSpec.describe DiscordBot::Config do
           ).and_return(custom_value)
         end
 
-        it { is_expected.to eq custom_value }
+        it { should eq custom_value }
       end
     end
   end

@@ -4,11 +4,7 @@ module DiscordBot
       ##
       # Base class for User commands.
       #
-      class Base
-        def initialize(bot)
-          @bot = bot
-        end
-
+      class Base < DiscordBot::Command
         def register
           logger.debug "Registering \"#{command_name}\" user command"
           bot.discord_bot.register_application_command(
@@ -29,7 +25,7 @@ module DiscordBot
         end
 
         def command_name
-          name.demodulize.titlecase
+          self.class.name.demodulize.titlecase
         end
 
         protected

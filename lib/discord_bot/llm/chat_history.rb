@@ -4,10 +4,11 @@ module DiscordBot
     # Represents a chat history with the LLM.
     #
     class ChatHistory
-      attr_reader :messages
+      attr_reader :messages, :bot_name
 
-      def initialize(system_prompt: default_system_prompt)
+      def initialize(system_prompt: default_system_prompt, bot_name:)
         @messages = []
+        @bot_name = bot_name
         self.system_prompt = system_prompt
       end
 
@@ -42,10 +43,6 @@ module DiscordBot
       end
 
       private
-
-      def bot_name
-        DiscordBot::Config.bot_name
-      end
 
       def default_system_prompt
         "You are a chat bot with the name \"#{bot_name}\". Your Discord ID " \
