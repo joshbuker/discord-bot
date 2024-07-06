@@ -1,9 +1,9 @@
 module DiscordBot
   module Api
     module Services
-      class Ollama < DiscordBot::Api::Request
+      class Ollama < DiscordBot::Api::Service
         def default_api_url
-          DiscordBot::LLM::API_URL
+          DiscordBot::GenAI::Text::API_URL
         end
 
         def list_local_models

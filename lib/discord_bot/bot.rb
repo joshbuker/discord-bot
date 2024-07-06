@@ -3,7 +3,7 @@ module DiscordBot
   # Initializes the bot, and is the general entrypoint for the code.
   #
   class Bot
-    attr_reader :config, :discord_bot, :logger
+    attr_reader :config, :discord_bot, :logger, :api
 
     def initialize(config: default_config, discord_bot: nil)
       @config = config

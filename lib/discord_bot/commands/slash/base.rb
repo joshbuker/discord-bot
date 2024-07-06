@@ -7,13 +7,14 @@ module DiscordBot
       class Base < DiscordBot::Command
         def register
           logger.debug "Registering /#{command_name} command"
-          bot.discord_bot.register_application_command(
-            command_name,
-            description
-          ) do |command|
-            register_subcommands(command)
-            register_options(command)
-          end
+          register_global_command
+          # if servers.any?
+          #   servers.each do |server|
+          #     register_server_command(server)
+          #   end
+          # else
+          #   register_global_command
+          # end
         end
 
         def handle
@@ -46,6 +47,27 @@ module DiscordBot
         end
 
         protected
+
+        def register_global_command
+          bot.discord_bot.register_application_command(
+            command_name,
+            description
+          ) do |command|
+            register_subcommands(command)
+            register_options(command)
+          end
+        end
+
+        def register_server_command(server_id)
+          bot.discord_bot.register_application_command(
+            command_name,
+            description,
+            server_id: server_id
+          ) do |command|
+            register_subcommands(command)
+            register_options(command)
+          end
+        end
 
         def register_subcommands(command)
           subcommands.each do |subcommand|

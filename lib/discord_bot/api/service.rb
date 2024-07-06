@@ -1,6 +1,6 @@
 module DiscordBot
   module Api
-    class Request
+    class Service
       attr_reader :api_url
 
       def initialize(**options)

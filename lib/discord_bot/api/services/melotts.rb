@@ -4,9 +4,9 @@ module DiscordBot
       ##
       # Provides access to MeloTTS via REST API Requests.
       #
-      class MeloTTS < DiscordBot::Api::Request
+      class MeloTTS < DiscordBot::Api::Service
         def default_api_url
-          DiscordBot::MeloTTS::API_URL
+          DiscordBot::GenAI::Voice::API_URL
         end
 
         def default_headers
@@ -26,9 +26,7 @@ module DiscordBot
             speaker_id: voice_options.speaker_id
           }.compact.to_json
 
-          response = post('/convert/tts', payload)
-        rescue StandardError => e
-          byebug
+          post('/convert/tts', payload)
         end
       end
     end

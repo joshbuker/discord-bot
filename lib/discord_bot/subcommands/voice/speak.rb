@@ -14,25 +14,25 @@ module DiscordBot
         end
 
         def run(command_event)
-          voice_channel = command.bot_voice_channel
+          voice_channel = command_event.bot_voice_channel
           if connected_to_voice?(voice_channel)
-            voip = Bot.voice(voice_channel.id)
+            voip = bot.discord_bot.voice(voice_channel.id)
             logger.info "Playing voice"
-            command.respond_with('Generating voice')
-            voice_options = DiscordBot::MeloTTS::VoiceOptions.new(
-              command.options
+            command_event.respond_with('Generating voice')
+            voice_options = DiscordBot::GenAI::Voice::Options.new(
+              command_event.options.symbolize_keys
             )
-            voice = DiscordBot::MeloTTS::Voice.new(
+            voice = DiscordBot::GenAI::Voice::Response.create(
               voice_options: voice_options
             )
-            command.update_response('Playing voice...')
+            command_event.update_response('Playing voice...')
             # voip.play_file(voice.file)
             voice.tempfile do |file|
               voip.play_file(file.path)
             end
-            command.update_response('Finished playing')
+            command_event.update_response('Finished playing')
           else
-            command.respond_with(
+            command_event.respond_with(
               'Please connect to voice with `/voice connect` first'
             )
           end

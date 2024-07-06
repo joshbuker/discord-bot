@@ -14,17 +14,17 @@ module DiscordBot
 
       # rubocop:disable Metrics
       def initialize(options = {})
-        @prompt = options['prompt']
-        @negative_prompt = options['negative_prompt'] || ''
-        @width = options['width'] || DEFAULT_WIDTH
-        @height = options['height'] || DEFAULT_HEIGHT
-        @steps = options['steps'] || DEFAULT_STEPS
-        @cfg_scale = options['cfg_scale'] || DEFAULT_CFG_SCALE
-        @force_spoiler = options['force_spoiler'] || false
-        @upscale_ratio = options['upscale_ratio'] || 1.0
+        @prompt = options[:prompt]
+        @negative_prompt = options[:negative_prompt] || ''
+        @width = options[:width] || DEFAULT_WIDTH
+        @height = options[:height] || DEFAULT_HEIGHT
+        @steps = options[:steps] || DEFAULT_STEPS
+        @cfg_scale = options[:cfg_scale] || DEFAULT_CFG_SCALE
+        @force_spoiler = options[:force_spoiler] || false
+        @upscale_ratio = options[:upscale_ratio] || 1.0
         # FIXME: This currently returns the attachment ID, not an object we can
         #        extract the base64 image from. Broken until that's in place.
-        @base_image = options['base_image'] || nil
+        @base_image = options[:base_image] || nil
 
         raise NotImplementedError if @base_image.present?
 

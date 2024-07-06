@@ -4,22 +4,22 @@ module DiscordBot
 
     def initialize(bot)
       @bot = bot
-      @chat_history = DiscordBot::LLM::ChatHistory.new(
+      @chat_history = DiscordBot::GenAI::Text::ChatHistory.new(
         bot_name: bot.config.bot_name
       )
-      @model = DiscordBot::LLM::Model.new
+      @model = DiscordBot::GenAI::Text::Model.new(bot: bot)
     end
 
     def generate_response(user_message)
-      chat_history.append(DiscordBot::LLM::ChatMessage.new(
+      chat_history.append(DiscordBot::GenAI::Text::ChatMessage.new(
         role: 'user', content: parse_user_message(user_message)
       ))
-      response = DiscordBot::LLM::Response.create(
+      response = DiscordBot::GenAI::Text::Response.create(
         chat_history: chat_history,
         model:        model,
         bot:          bot
       )
-      chat_history.append(DiscordBot::LLM::ChatMessage.new(
+      chat_history.append(DiscordBot::GenAI::Text::ChatMessage.new(
         role: 'assistant', content: response.message
       ))
       return response
@@ -30,7 +30,7 @@ module DiscordBot
     end
 
     def reset_model
-      @model = DiscordBot::LLM::Model.new
+      @model = DiscordBot::GenAI::Text::Model.new
     end
 
     def reset_system_prompt
@@ -38,7 +38,7 @@ module DiscordBot
     end
 
     def model=(new_model)
-      unless new_model.is_a?(DiscordBot::LLM::Model)
+      unless new_model.is_a?(DiscordBot::GenAI::Text::Model)
         raise ArgumentError,
           "Tried to set model using invalid class type #{new_model.class.name}"
       end

@@ -1,9 +1,9 @@
 module DiscordBot
   module Api
     module Services
-      class Automatic1111 < DiscordBot::Api::Request
+      class Automatic1111 < DiscordBot::Api::Service
         def default_api_url
-          DiscordBot::StableDiffusion::API_URL
+          DiscordBot::GenAI::Image::API_URL
         end
 
         def list_local_models

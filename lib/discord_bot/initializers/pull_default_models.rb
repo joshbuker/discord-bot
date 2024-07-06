@@ -10,7 +10,7 @@ module DiscordBot
 
       def setup
         logger.info 'Pulling default models'
-        DiscordBot::LLM::Model.pull_default_model
+        DiscordBot::GenAI::Text::Model.pull_default_model(bot)
       end
     end
   end

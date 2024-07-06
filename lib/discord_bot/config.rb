@@ -25,7 +25,8 @@ module DiscordBot
     DEFAULT_LOG_FILE_PATH = '/var/log/ruby_discord_bot.log'
 
     attr_reader :admin_user_ids, :bot_name, :discord_bot_token, :log_file_path,
-      :slash_command_server_ids, :fast_boot, :skip_motd, :options
+      :slash_command_server_ids, :fast_boot, :skip_motd, :options,
+      :automatic1111_api_url, :melotts_api_url, :ollama_api_url
 
     # rubocop:disable Layout/LineLength
     def initialize(**options)
@@ -38,6 +39,9 @@ module DiscordBot
       @fast_boot = settings(:fast_boot, false)
       @skip_motd = settings(:skip_motd, false)
       @log_file_path = settings(:log_file_path, DEFAULT_LOG_FILE_PATH)
+      @automatic1111_api_url = settings(:automatic1111_api_url, DiscordBot::GenAI::Image::API_URL)
+      @melotts_api_url = settings(:melotts_api_url, DiscordBot::GenAI::Voice::API_URL)
+      @automatic1111_api_url = settings(:ollama_api_url, DiscordBot::GenAI::Text::API_URL)
     end
     # rubocop:enable Layout/LineLength
 

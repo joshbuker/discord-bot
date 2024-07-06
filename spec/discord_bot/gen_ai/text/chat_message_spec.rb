@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe DiscordBot::LLM::ChatMessage do
+RSpec.describe DiscordBot::GenAI::Text::ChatMessage do
   subject(:chat_message) { described_class.new(role: role, content: content) }
   let(:content) { 'Some message' }
 

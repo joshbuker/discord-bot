@@ -24,14 +24,9 @@ module DiscordBot
           require_admin!(command_event){ return }
 
           message = command.options['message']
-          conversation = DiscordBot::LLM::Conversation.new
-          model = DiscordBot::LLM::Model.new
+          conversation = DiscordBot::Conversation.new(bot)
           command.respond_with('Sending your nice message...')
-          response = DiscordBot::LLM::Response.new(
-            conversation_history: conversation,
-            user_message:         message,
-            model:                model
-          )
+          response = conversation.generate_response(message)
           command_event.target_user.direct_message(response.message)
           command.update_response('Nice message sent')
           logger.info(

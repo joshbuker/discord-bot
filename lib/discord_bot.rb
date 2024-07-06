@@ -28,6 +28,20 @@ end
 #
 module DiscordBot
   ##
+  # A wrapper around the API to provide REST requests for things such as GenAI
+  # responses.
+  #
+  module Api
+    module Services
+      autoload :Automatic1111, 'discord_bot/api/services/automatic1111'
+      autoload :MeloTTS,       'discord_bot/api/services/melotts'
+      autoload :Ollama,        'discord_bot/api/services/ollama'
+    end
+
+    autoload :Interface, 'discord_bot/api/interface'
+    autoload :Service,   'discord_bot/api/service'
+  end
+  ##
   # Commands that can be ran manually, as opposed to the automatic responses to
   # messages.
   #
@@ -116,56 +130,66 @@ module DiscordBot
   end
 
   ##
+  # Generative AI
+  #
+  module GenAI
+    ##
+    # For providing GenAI image responses
+    #
+    # Contains everything needed to interact with Stable Diffusion via
+    # Automatic1111 api.
+    #
+    module Image
+      API_PROTOCOL  = ENV['STABLE_DIFFUSION_SERVICE_PROTOCOL'] || 'http://'
+      API_HOST      = ENV['STABLE_DIFFUSION_SERVICE_NAME'] || 'localhost'
+      API_PORT      = ENV['STABLE_DIFFUSION_SERVICE_PORT'] || '7860'
+      API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+
+      autoload :Model,    'discord_bot/gen_ai/image/model'
+      autoload :Options,  'discord_bot/gen_ai/image/options'
+      autoload :Response, 'discord_bot/gen_ai/image/response'
+    end
+
+    ##
+    # For providing GenAI text responses
+    #
+    # Contains everything needed to interact with the LLM via Ollama.
+    #
+    module Text
+      API_PROTOCOL  = ENV['OLLAMA_SERVICE_PROTOCOL'] || 'http://'
+      API_HOST      = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
+      API_PORT      = ENV['OLLAMA_SERVICE_PORT'] || '11434'
+      API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+      DEFAULT_MODEL = ENV['DEFAULT_LLM_MODEL'] || 'llama3'
+
+      autoload :ChatMessage,  'discord_bot/gen_ai/text/chat_message'
+      autoload :ChatHistory,  'discord_bot/gen_ai/text/chat_history'
+      autoload :Model,        'discord_bot/gen_ai/text/model'
+      autoload :Response,     'discord_bot/gen_ai/text/response'
+    end
+
+    ##
+    # For providing GenAI voice responses
+    #
+    module Voice
+      API_PROTOCOL  = ENV['MELOTTS_SERVICE_PROTOCOL'] || 'http://'
+      API_HOST      = ENV['MELOTTS_SERVICE_NAME'] || 'localhost'
+      API_PORT      = ENV['MELOTTS_SERVICE_PORT'] || '8080'
+      API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
+
+      autoload :Options,  'discord_bot/gen_ai/voice/options'
+      autoload :Response, 'discord_bot/gen_ai/voice/response'
+    end
+  end
+
+  ##
   # Initializers to setup the bot
   #
   module Initializers
     autoload :InitializeCallbacks, 'discord_bot/initializers/initialize_callbacks'
-    autoload :MessageOfTheDay, 'discord_bot/initializers/message_of_the_day'
-    autoload :PullDefaultModels, 'discord_bot/initializers/pull_default_models'
-    autoload :RefreshCommands, 'discord_bot/initializers/refresh_commands'
-  end
-
-  ##
-  # Contains everything needed to interact with the LLM via Ollama.
-  #
-  module LLM
-    API_PROTOCOL  = ENV['OLLAMA_SERVICE_PROTOCOL'] || 'http://'
-    API_HOST      = ENV['OLLAMA_SERVICE_NAME'] || 'localhost'
-    API_PORT      = ENV['OLLAMA_SERVICE_PORT'] || '11434'
-    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
-    DEFAULT_MODEL = ENV['DEFAULT_LLM_MODEL'] || 'llama3'
-
-    autoload :ApiRequest,   'discord_bot/llm/api_request'
-    autoload :ChatMessage,  'discord_bot/llm/chat_message'
-    autoload :ChatHistory,  'discord_bot/llm/chat_history'
-    autoload :Model,        'discord_bot/llm/model'
-    autoload :Response,     'discord_bot/llm/response'
-  end
-
-  module MeloTTS
-    API_PROTOCOL  = ENV['MELOTTS_SERVICE_PROTOCOL'] || 'http://'
-    API_HOST      = ENV['MELOTTS_SERVICE_NAME'] || 'localhost'
-    API_PORT      = ENV['MELOTTS_SERVICE_PORT'] || '8080'
-    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
-
-    autoload :ApiRequest, 'discord_bot/melotts/api_request'
-    autoload :VoiceOptions, 'discord_bot/melotts/voice_options'
-    autoload :Voice, 'discord_bot/melotts/voice'
-  end
-
-  ##
-  # Contains everything needed to interact with Stable Diffusion via
-  # Automatic1111 api.
-  #
-  module StableDiffusion
-    API_PROTOCOL  = ENV['STABLE_DIFFUSION_SERVICE_PROTOCOL'] || 'http://'
-    API_HOST      = ENV['STABLE_DIFFUSION_SERVICE_NAME'] || 'localhost'
-    API_PORT      = ENV['STABLE_DIFFUSION_SERVICE_PORT'] || '7860'
-    API_URL       = "#{API_PROTOCOL}#{API_HOST}:#{API_PORT}".freeze
-
-    autoload :ApiRequest,   'discord_bot/stable_diffusion/api_request'
-    autoload :ImageOptions, 'discord_bot/stable_diffusion/image_options'
-    autoload :Image,        'discord_bot/stable_diffusion/image'
+    autoload :MessageOfTheDay,     'discord_bot/initializers/message_of_the_day'
+    autoload :PullDefaultModels,   'discord_bot/initializers/pull_default_models'
+    autoload :RefreshCommands,     'discord_bot/initializers/refresh_commands'
   end
 
   module Subcommands
@@ -175,26 +199,26 @@ module DiscordBot
 
     module Model
       autoload :Current, 'discord_bot/subcommands/model/current'
-      autoload :List, 'discord_bot/subcommands/model/list'
-      autoload :Pull, 'discord_bot/subcommands/model/pull'
-      autoload :Reset, 'discord_bot/subcommands/model/reset'
-      autoload :Set, 'discord_bot/subcommands/model/set'
+      autoload :List,    'discord_bot/subcommands/model/list'
+      autoload :Pull,    'discord_bot/subcommands/model/pull'
+      autoload :Reset,   'discord_bot/subcommands/model/reset'
+      autoload :Set,     'discord_bot/subcommands/model/set'
     end
 
     module SystemPrompt
       autoload :Current, 'discord_bot/subcommands/system_prompt/current'
-      autoload :Reset, 'discord_bot/subcommands/system_prompt/reset'
-      autoload :Set, 'discord_bot/subcommands/system_prompt/set'
+      autoload :Reset,   'discord_bot/subcommands/system_prompt/reset'
+      autoload :Set,     'discord_bot/subcommands/system_prompt/set'
     end
 
     module Voice
-      autoload :Connect, 'discord_bot/subcommands/voice/connect'
+      autoload :Connect,    'discord_bot/subcommands/voice/connect'
       autoload :Disconnect, 'discord_bot/subcommands/voice/disconnect'
-      autoload :Generate, 'discord_bot/subcommands/voice/generate'
-      autoload :Speak, 'discord_bot/subcommands/voice/speak'
-      autoload :Stop, 'discord_bot/subcommands/voice/stop'
-      autoload :Tuturu, 'discord_bot/subcommands/voice/tuturu'
-      autoload :Youtube, 'discord_bot/subcommands/voice/youtube'
+      autoload :Generate,   'discord_bot/subcommands/voice/generate'
+      autoload :Speak,      'discord_bot/subcommands/voice/speak'
+      autoload :Stop,       'discord_bot/subcommands/voice/stop'
+      autoload :Tuturu,     'discord_bot/subcommands/voice/tuturu'
+      autoload :Youtube,    'discord_bot/subcommands/voice/youtube'
     end
   end
 

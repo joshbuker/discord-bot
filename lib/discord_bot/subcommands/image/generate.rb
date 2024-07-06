@@ -21,8 +21,8 @@ module DiscordBot
         # FIXME: Clearly too complex
         # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         def run(command_event)
-          image_options = DiscordBot::StableDiffusion::ImageOptions.new(
-            command_event.options
+          image_options = DiscordBot::GenAI::Image::Options.new(
+            command_event.options.symbolize_keys
           )
           logger.warn(
             "Image requested by #{command_event.whois} with the following " \
@@ -39,7 +39,7 @@ module DiscordBot
           logger.info("Image requested by #{command_event.whois}")
           command_event.respond_with('Generating image')
           begin
-            image = DiscordBot::StableDiffusion::Image.new(
+            image = DiscordBot::GenAI::Image::Response.create(
               image_options: image_options
             )
           rescue StandardError => e
