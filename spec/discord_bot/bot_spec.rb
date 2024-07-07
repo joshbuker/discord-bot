@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe DiscordBot::Bot do
-  subject(:bot) { described_class.new }
+  subject(:bot) { described_class.new(api: api_double) }
 
   describe 'config' do
     subject(:config) { bot.config }

@@ -3,6 +3,13 @@ require 'byebug'
 # require 'faker'
 require 'shoulda-matchers'
 
+# Include support files
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+# FIXME: This shouldn't be necessary to get the tests passing, find a better
+#        solution to dev envs leaking into specs.
+ENV['DISCORD_BOT_TOKEN'] = nil
+
 ############################
 ## Generate Test Coverage ##
 ############################
@@ -53,6 +60,9 @@ RSpec.configure do |config|
   ####################
   ## General Config ##
   ####################
+
+  # Include api helpers on every spec
+  config.include ApiSpecHelper
 
   # This allows you to limit a spec run to individual examples or groups
   # you care about by tagging them with `:focus` metadata. When nothing
