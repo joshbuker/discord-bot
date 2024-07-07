@@ -16,7 +16,7 @@ module DiscordBot
             command_event,
             'Due to the large size of models, this command is restricted ' \
             'to admins'
-          ){ return }
+          ) { return }
 
           requested_model = command_event.options['model']
           logger.info(

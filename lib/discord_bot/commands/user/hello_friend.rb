@@ -15,7 +15,7 @@ module DiscordBot
             require_admin!(
               command_event,
               'To prevent unwanted spam, this command is restricted to admins'
-            ){ return }
+            ) { return }
 
             user = command_event.target_user
             logger.info(

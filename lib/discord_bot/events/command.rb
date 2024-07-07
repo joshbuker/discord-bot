@@ -51,9 +51,9 @@ module DiscordBot
       def send_file(file:, caption:, filename:, spoiler: false)
         @event.channel.send_file(
           file,
-          caption: caption,
+          caption:  caption,
           filename: filename,
-          spoiler: spoiler
+          spoiler:  spoiler
         )
       end
     end

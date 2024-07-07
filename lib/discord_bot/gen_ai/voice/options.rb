@@ -6,23 +6,23 @@ module DiscordBot
       #
       class Options
         DEFAULT_SPEED = 1.0
-        DEFAULT_LANGUAGE = 'EN'
-        DEFAULT_SPEAKER_ID = 'EN-Default'
+        DEFAULT_LANGUAGE = 'EN'.freeze
+        DEFAULT_SPEAKER_ID = 'EN-Default'.freeze
         LANGUAGE_CHOICES = {
-          'English' => 'EN',
-          'Spanish' => 'ES',
-          'French' => 'FR',
-          'Chinese' => 'ZH',
+          'English'  => 'EN',
+          'Spanish'  => 'ES',
+          'French'   => 'FR',
+          'Chinese'  => 'ZH',
           'Japanese' => 'JP',
-          'Korean' => 'KR'
-        }
+          'Korean'   => 'KR'
+        }.freeze
         SPEAKER_ID_CHOICES = {
-          'American English' => 'EN-US',
-          'British English' => 'EN-BR',
-          'Indian English' => 'EN_INDIA',
+          'American English'   => 'EN-US',
+          'British English'    => 'EN-BR',
+          'Indian English'     => 'EN_INDIA',
           'Australian English' => 'EN-AU',
-          'Default English' => 'EN-Default'
-        }
+          'Default English'    => 'EN-Default'
+        }.freeze
 
         attr_reader :prompt, :playback_speed, :language, :speaker_id
 

@@ -27,27 +27,32 @@ module DiscordBot
 
     def debug(message)
       return unless config.log_level?(:debug)
+
       log(message, level: :debug)
     end
 
     def info(message)
       return unless config.log_level?(:info)
+
       log(message, level: :info)
     end
 
     # REVIEW: warn or warning? Which should be used?
     def warn(message)
       return unless config.log_level?(:warn)
+
       log(message, level: :warn)
     end
 
     def error(message)
       return unless config.log_level?(:error)
+
       log(message, level: :error)
     end
 
     def fatal(message)
       return unless config.log_level?(:fatal)
+
       log(message, level: :fatal)
     end
 
@@ -72,8 +77,8 @@ module DiscordBot
     def logfile_format(timestamp, message, level)
       {
         timestamp: timestamp,
-        level: level,
-        message: message
+        level:     level,
+        message:   message
       }.to_json
     end
   end

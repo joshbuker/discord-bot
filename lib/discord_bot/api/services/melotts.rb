@@ -20,9 +20,9 @@ module DiscordBot
           end
 
           payload = {
-            text: voice_options.prompt,
-            speed: voice_options.playback_speed,
-            language: voice_options.language,
+            text:       voice_options.prompt,
+            speed:      voice_options.playback_speed,
+            language:   voice_options.language,
             speaker_id: voice_options.speaker_id
           }.compact.to_json
 

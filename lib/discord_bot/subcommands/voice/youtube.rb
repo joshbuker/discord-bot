@@ -10,7 +10,7 @@ module DiscordBot
           options.string(:url, 'URL of the youtube video', required: true)
         end
 
-        def run(command_event)
+        def run(_command_event)
           voice_channel = command.bot_voice_channel
           url = command.options['url']
           if connected_to_voice?(voice_channel)

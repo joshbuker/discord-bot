@@ -22,7 +22,7 @@ module DiscordBot
       chat_history.append(DiscordBot::GenAI::Text::ChatMessage.new(
         role: 'assistant', content: response.message
       ))
-      return response
+      response
     end
 
     def reset_history

@@ -10,7 +10,7 @@ module DiscordBot
         def self.create(voice_options:, bot:)
           response = new(
             voice_options: voice_options,
-            bot: bot
+            bot:           bot
           )
           response.generate
         end
@@ -41,7 +41,7 @@ module DiscordBot
         def tempfile
           return unless content.present?
 
-          Tempfile.create(['voice', 'wav'], binmode: true) do |file|
+          Tempfile.create(%w[voice wav], binmode: true) do |file|
             file.write(content)
             yield file
           end

@@ -49,18 +49,18 @@ module DiscordBot
     end
 
     def require_admin!(command, reason = '')
-      unless command.ran_by_admin?
-        logger.warn(
-          "#{command.whois} tried running the #{command.command_name} " \
-          'command without permission'
-        )
-        if reason.present?
-          command.respond_with(reason)
-        else
-          command.respond_with('This command is restricted to admins!')
-        end
-        yield
+      return if command.ran_by_admin?
+
+      logger.warn(
+        "#{command.whois} tried running the #{command.command_name} " \
+        'command without permission'
+      )
+      if reason.present?
+        command.respond_with(reason)
+      else
+        command.respond_with('This command is restricted to admins!')
       end
+      yield
     end
   end
 end

@@ -2,13 +2,14 @@ require 'spec_helper'
 
 RSpec.describe DiscordBot::GenAI::Text::ChatMessage do
   subject(:chat_message) { described_class.new(role: role, content: content) }
+
   let(:content) { 'Some message' }
 
   context 'when passed an invalid role' do
     let(:role) { 'unknown' }
 
     it 'raises an ArgumentError' do
-      expect{ chat_message }.to raise_error(ArgumentError)
+      expect { chat_message }.to raise_error(ArgumentError)
     end
   end
 
@@ -16,12 +17,12 @@ RSpec.describe DiscordBot::GenAI::Text::ChatMessage do
     let(:role) { 'user' }
 
     it 'does not raise any errors' do
-      expect{ chat_message }.not_to raise_error
+      expect { chat_message }.not_to raise_error
     end
 
     it 'can render the message as a hash' do
       expect(chat_message.to_hash).to eq({
-        role: role,
+        role:    role,
         content: content
       })
     end

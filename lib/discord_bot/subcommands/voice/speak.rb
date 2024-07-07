@@ -17,7 +17,7 @@ module DiscordBot
           voice_channel = command_event.bot_voice_channel
           if connected_to_voice?(voice_channel)
             voip = bot.discord_bot.voice(voice_channel.id)
-            logger.info "Playing voice"
+            logger.info 'Playing voice'
             command_event.respond_with('Generating voice')
             voice_options = DiscordBot::GenAI::Voice::Options.new(
               command_event.options.symbolize_keys

@@ -6,7 +6,7 @@ module DiscordBot
           'Play tuturu in current voice channel'
         end
 
-        def run(command_event)
+        def run(_command_event)
           voice_channel = command.bot_voice_channel
           if connected_to_voice?(voice_channel)
             voip = Bot.voice(voice_channel.id)

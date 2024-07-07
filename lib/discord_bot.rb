@@ -41,6 +41,7 @@ module DiscordBot
     autoload :Interface, 'discord_bot/api/interface'
     autoload :Service,   'discord_bot/api/service'
   end
+
   ##
   # Commands that can be ran manually, as opposed to the automatic responses to
   # messages.

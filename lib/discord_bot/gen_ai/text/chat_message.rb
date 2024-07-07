@@ -2,7 +2,7 @@ module DiscordBot
   module GenAI
     module Text
       class ChatMessage
-        VALID_ROLES = %w[user assistant system]
+        VALID_ROLES = %w[user assistant system].freeze
 
         attr_reader :role, :content
 
@@ -22,7 +22,7 @@ module DiscordBot
           { role: role, content: content }
         end
 
-        def to_json
+        def to_json(*_args)
           to_hash.to_json
         end
       end

@@ -5,13 +5,13 @@ module DiscordBot
   class Bot
     attr_reader :config, :discord_bot, :logger, :api
 
-    def initialize(config: default_config, discord_bot: nil)
+    def initialize(config: default_config, discord_bot: nil, api: nil)
       @config = config
       @channel_conversations = {}
-      @api = DiscordBot::Api::Interface.new(self)
+      @api = api || DiscordBot::Api::Interface.new(self)
       @logger = DiscordBot::Logger.new(self)
       @discord_bot = discord_bot || Discordrb::Bot.new(
-        token: config.discord_bot_token || 'invalid',
+        token:   config.discord_bot_token || 'invalid',
         intents: config.discord_bot_intents
       )
     end

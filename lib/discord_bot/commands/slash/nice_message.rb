@@ -21,7 +21,7 @@ module DiscordBot
         # FIXME: Update this to inject a message into chat history from the
         #        calling user, rather than the target user
         def run(command_event)
-          require_admin!(command_event){ return }
+          require_admin!(command_event) { return }
 
           message = command.options['message']
           conversation = DiscordBot::Conversation.new(bot)
@@ -31,7 +31,7 @@ module DiscordBot
           command.update_response('Nice message sent')
           logger.info(
             "Message sent: #{command.options['message']}\n" \
-            "Sender: #{command.whois}\n"\
+            "Sender: #{command.whois}\n" \
             "Sent to: #{user.whois}"
           )
         end

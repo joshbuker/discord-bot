@@ -10,7 +10,7 @@ module DiscordBot
         end
 
         def run(command_event)
-          require_admin!(command_event){ return }
+          require_admin!(command_event) { return }
 
           command_event.respond_with 'Shutting down, see you next time!'
           logger.warn(

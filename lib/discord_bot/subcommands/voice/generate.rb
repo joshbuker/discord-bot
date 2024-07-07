@@ -21,7 +21,7 @@ module DiscordBot
           begin
             voice = DiscordBot::GenAI::Voice::Response.create(
               voice_options: voice_options,
-              bot: bot
+              bot:           bot
             )
           rescue StandardError => e
             logger.error "Failed to generate voice due to:\n#{e.message}"
@@ -33,9 +33,9 @@ module DiscordBot
           end
           caption = "Generated a voice recording requested by #{command_event.user.mention}"
           command_event.send_file(
-            file: voice.file,
+            file:     voice.file,
             filename: 'attachment.wav',
-            caption: caption
+            caption:  caption
           )
         end
       end

@@ -7,9 +7,9 @@ module DiscordBot
       class ChatHistory
         attr_reader :messages, :bot_name
 
-        def initialize(system_prompt: default_system_prompt, bot_name:)
+        def initialize(bot_name: nil, system_prompt: default_system_prompt)
           @messages = []
-          @bot_name = bot_name
+          @bot_name = bot_name || 'Ruby'
           self.system_prompt = system_prompt
         end
 
@@ -21,6 +21,7 @@ module DiscordBot
 
         def system_prompt
           return default_system_prompt if @messages.empty?
+
           @messages.first.content
         end
 

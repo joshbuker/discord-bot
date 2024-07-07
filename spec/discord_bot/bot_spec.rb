@@ -36,22 +36,24 @@ RSpec.describe DiscordBot::Bot do
     #         (is there a better way to do this?)
     let(:config) { DiscordBot::Config.new(log_level: :fatal) }
     let(:discord_bot_double) { instance_double(Discordrb::Bot) }
-    let(:application_command_double) { double('application_command') }
+    let(:application_command_double) do
+      instance_double(Discordrb::Events::ApplicationCommandEventHandler)
+    end
 
     before do
-      allow(discord_bot_double).to receive(:get_application_commands).and_return([])
       allow(discord_bot_double).to receive(:register_application_command)
       allow(discord_bot_double).to receive(:message)
-      allow(discord_bot_double).to receive(:application_command).and_return(application_command_double)
+      allow(discord_bot_double).to receive_messages(get_application_commands: [], application_command: application_command_double)
       allow(application_command_double).to receive(:subcommand)
       allow(discord_bot_double).to receive(:invite_url)
       allow(discord_bot_double).to receive(:run).with(true)
+      allow(discord_bot_double).to receive(:join)
     end
 
     it 'sends the join command to Discordrb::Bot' do
-      expect(discord_bot_double).to receive(:join)
-
       bot.run
+
+      expect(discord_bot_double).to have_received(:join)
     end
   end
 

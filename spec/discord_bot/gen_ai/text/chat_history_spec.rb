@@ -2,12 +2,18 @@ require 'spec_helper'
 
 RSpec.describe DiscordBot::GenAI::Text::ChatHistory do
   subject(:chat_history) { described_class.new(system_prompt: system_prompt) }
+
   let(:system_prompt) { 'Some system prompt' }
 
   describe 'append' do
+    let(:message) do
+      DiscordBot::GenAI::Text::ChatMessage.new(
+        role:    'user',
+        content: 'Test message'
+      )
+    end
+
     it 'appends a message to the end of the chat history' do
-      message =
-        DiscordBot::GenAI::Text::ChatMessage.new(role: 'user', content: 'Test message')
       expect(chat_history.messages.last).not_to eq(message)
       chat_history.append(message)
       expect(chat_history.messages.last).to eq(message)

@@ -9,8 +9,6 @@ gem 'rest-client'
 
 # FIXME: Don't load dev dependencies in production Dockerfile
 group :test do
-  gem 'shoulda-matchers'
-  gem 'simplecov', require: false
   gem 'bundler-audit'
   gem 'byebug'
   gem 'rake'
@@ -18,4 +16,6 @@ group :test do
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rspec'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
 end

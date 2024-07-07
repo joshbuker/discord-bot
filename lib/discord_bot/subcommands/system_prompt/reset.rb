@@ -13,7 +13,7 @@ module DiscordBot
         def run(command_event)
           logger.info(
             "System prompt for channel #{command_event.channel_name} has " \
-            "been reset to default"
+            'been reset to default'
           )
           default_prompt =
             bot.conversation(command_event.channel_id).reset_system_prompt

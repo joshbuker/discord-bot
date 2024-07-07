@@ -32,10 +32,10 @@ module DiscordBot
             command_event,
             'This command is restricted to admins until some safeguards ' \
             'have been implemented.'
-          ){ return }
+          ) { return }
           # HACK: This should be solved by using server commands instead of
           #       global commands, rather than checking if ran in a DM
-          prevent_direct_messages!(command_event, image_options){ return }
+          prevent_direct_messages!(command_event, image_options) { return }
           logger.info("Image requested by #{command_event.whois}")
           command_event.respond_with('Generating image')
           begin
@@ -70,18 +70,18 @@ module DiscordBot
         private
 
         def prevent_direct_messages!(command_event)
-          if command_event.direct_message?
-            logger.info(
-              "#{command_event.whois} tried running the image generate command " \
-              "in a direct message with the following parameters:\n" \
-              "#{image_options.about}"
-            )
-            command_event.respond_with(
-              'This command is restricted to servers until some safeguards ' \
-              'have been implemented.'
-            )
-            yield
-          end
+          return unless command_event.direct_message?
+
+          logger.info(
+            "#{command_event.whois} tried running the image generate command " \
+            "in a direct message with the following parameters:\n" \
+            "#{image_options.about}"
+          )
+          command_event.respond_with(
+            'This command is restricted to servers until some safeguards ' \
+            'have been implemented.'
+          )
+          yield
         end
       end
     end

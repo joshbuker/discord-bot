@@ -12,20 +12,20 @@ module DiscordBot
           response = bot.api.ollama.list_local_models
           models = JSON.parse(response.body)['models']
           models.map do |model|
-            self.new(model_name: model['name'], bot: bot)
+            new(model_name: model['name'], bot: bot)
           end
         end
 
         def self.pull_default_model(bot)
-          self.new(
+          new(
             model_name: DiscordBot::GenAI::Text::DEFAULT_MODEL,
-            bot: bot
+            bot:        bot
           ).pull
         rescue DiscordBot::Errors::FailedToPullModel => e
           bot.logger.error e.message
         end
 
-        def initialize(model_name: nil, bot:)
+        def initialize(bot:, model_name: nil)
           @name = if model_name.nil?
                     DiscordBot::GenAI::Text::DEFAULT_MODEL
                   else
