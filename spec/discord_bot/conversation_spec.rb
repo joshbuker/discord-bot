@@ -6,7 +6,9 @@ RSpec.describe DiscordBot::Conversation do
   let(:bot) { DiscordBot::Bot.new(config: config, api: api_double) }
   # REVIEW: Silences the logs while running tests
   #         (is there a better way to do this?)
-  let(:config) { DiscordBot::Config.new(log_level: :fatal) }
+  let(:config) do
+    DiscordBot::Config.new(log_level: :fatal, discord_bot_token: 'invalid')
+  end
 
   describe 'generate_response' do
     subject(:generate_response) { conversation.generate_response(message) }

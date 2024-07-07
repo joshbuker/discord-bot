@@ -11,7 +11,7 @@ module DiscordBot
       @api = api || DiscordBot::Api::Interface.new(self)
       @logger = DiscordBot::Logger.new(self)
       @discord_bot = discord_bot || Discordrb::Bot.new(
-        token:   config.discord_bot_token || 'invalid',
+        token:   config.discord_bot_token,
         intents: config.discord_bot_intents
       )
     end
