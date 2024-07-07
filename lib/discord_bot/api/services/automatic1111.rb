@@ -10,7 +10,6 @@ module DiscordBot
           get('/sdapi/v1/sd-models')
         end
 
-        # rubocop:disable Metrics/MethodLength
         def text_to_image(image_options:)
           unless image_options.prompt.present?
             raise ArgumentError,
@@ -49,7 +48,6 @@ module DiscordBot
           }.to_json
           post('/sdapi/v1/img2img', payload)
         end
-        # rubocop:enable Metrics/MethodLength
 
         def nsfw_check(input_image:)
           unless input_image.present?

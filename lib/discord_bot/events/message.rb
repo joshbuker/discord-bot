@@ -62,7 +62,6 @@ module DiscordBot
         mentions_bot? || direct_message?
       end
 
-      # rubocop:disable Metrics/MethodLength
       def reply_with(response)
         return if response.empty?
 
@@ -78,7 +77,6 @@ module DiscordBot
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
       def start_typing_thread
         Thread.new do

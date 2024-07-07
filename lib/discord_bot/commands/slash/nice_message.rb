@@ -17,7 +17,6 @@ module DiscordBot
           options.string(:message, 'what message to send', required: true)
         end
 
-        # rubocop:disable Metrics
         # FIXME: Update this to inject a message into chat history from the
         #        calling user, rather than the target user
         def run(command_event)
@@ -35,7 +34,6 @@ module DiscordBot
             "Sent to: #{user.whois}"
           )
         end
-        # rubocop:enable Metrics
       end
     end
   end

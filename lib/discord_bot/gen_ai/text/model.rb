@@ -74,7 +74,6 @@ module DiscordBot
           end
         end
 
-        # rubocop:disable Metrics/MethodLength
         def model_details
           response = api.ollama.list_local_models
           model_info = JSON.parse(response.body)['models'].find do |model|
@@ -90,7 +89,6 @@ module DiscordBot
         rescue RestClient::NotFound
           {}
         end
-        # rubocop:enable Metrics/MethodLength
       end
     end
   end

@@ -10,7 +10,6 @@ module DiscordBot
             'Say hello to this user'
           end
 
-          # rubocop:disable Metrics/MethodLength
           def run(command_event)
             require_admin!(
               command_event,
@@ -30,7 +29,6 @@ module DiscordBot
               "Hello friend message sent to #{user.mention}"
             )
           end
-          # rubocop:enable Metrics/MethodLength
         end
       end
     end
