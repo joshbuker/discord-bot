@@ -5,7 +5,7 @@ module ApiSpecHelper
         list_local_models: instance_double(RestClient::Response, {
           body: { models: [{ 'name' => 'llama3' }] }.to_json
         }),
-        chat: instance_double(RestClient::Response, {
+        chat:              instance_double(RestClient::Response, {
           body: { message: { content: 'Some content' } }.to_json
         })
       })
