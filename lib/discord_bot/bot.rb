@@ -30,7 +30,7 @@ module DiscordBot
     rescue DiscordBot::Errors::FailedToBoot => e
       logger.fatal(
         "Failed to boot due to uncaught exception \"#{e.message}\" " \
-        "(double check your bot token)"
+        '(double check your bot token)'
       )
     rescue Interrupt
       shutdown

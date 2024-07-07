@@ -25,7 +25,7 @@ module DiscordBot
           command_event.respond_with("Pulling LLM model \"#{requested_model}\"...")
           model = DiscordBot::GenAI::Text::Model.new(
             model_name: requested_model,
-            bot: bot
+            bot:        bot
           )
           if model.available?
             command_event.update_response(

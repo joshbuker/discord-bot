@@ -41,7 +41,7 @@ module DiscordBot
           begin
             image = DiscordBot::GenAI::Image::Response.create(
               image_options: image_options,
-              bot: bot
+              bot:           bot
             )
           rescue StandardError => e
             logger.info "Failed to generate image due to:\n#{e.message}"

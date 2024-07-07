@@ -14,7 +14,7 @@ module DiscordBot
           requested_model = command_event.options['model']
           model = DiscordBot::GenAI::Text::Model.new(
             model_name: requested_model,
-            bot: bot
+            bot:        bot
           )
           if model.available?
             logger.info(

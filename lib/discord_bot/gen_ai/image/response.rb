@@ -24,14 +24,14 @@ module DiscordBot
         def generate
           time_before = Time.current
           response = if options.base_image.present?
-                      api.automatic1111.image_to_image(
-                        image_options: options
-                      )
-                    else
-                      api.automatic1111.text_to_image(
-                        image_options: options
-                      )
-                    end
+                       api.automatic1111.image_to_image(
+                         image_options: options
+                       )
+                     else
+                       api.automatic1111.text_to_image(
+                         image_options: options
+                       )
+                     end
           time_after = Time.current
           @time_taken = time_after - time_before
           @body = JSON.parse(response.body)

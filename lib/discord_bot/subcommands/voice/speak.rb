@@ -24,7 +24,7 @@ module DiscordBot
             )
             voice = DiscordBot::GenAI::Voice::Response.create(
               voice_options: voice_options,
-              bot: bot
+              bot:           bot
             )
             command_event.update_response('Playing voice...')
             # voip.play_file(voice.file)
