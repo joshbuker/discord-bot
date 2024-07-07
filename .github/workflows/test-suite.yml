@@ -28,6 +28,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt-get install -y libsodium-dev libopus0 ffmpeg opus-tools libopus-dev
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
