@@ -12,11 +12,11 @@ module DiscordBot
         end
 
         def run(command_event)
+          system_prompt = command_event.options['system_prompt']
           logger.info(
             "System prompt for channel #{command_event.channel_name} has " \
             "been reset to:\n#{system_prompt}"
           )
-          system_prompt = command_event.options['system_prompt']
           bot.conversation(command_event.channel_id).system_prompt =
             system_prompt
           if command_event.options['reset_history']

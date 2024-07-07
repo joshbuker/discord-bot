@@ -7,11 +7,11 @@ module DiscordBot
         end
 
         def run(command_event)
-          logger.info "#{command.whois} inspected the current system prompt"
+          logger.info "#{command_event.whois} inspected the current system prompt"
           prompt = bot.conversation(command_event.channel_id).system_prompt
-          command.respond_with(
+          command_event.respond_with(
             'The currently loaded system prompt for ' \
-            "##{command.channel_name} is:\n#{prompt}"
+            "##{command_event.channel_name} is:\n#{prompt}"
           )
         end
       end

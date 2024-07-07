@@ -27,6 +27,11 @@ module DiscordBot
     def run
       setup_bot
       start_bot
+    rescue DiscordBot::Errors::FailedToBoot => e
+      logger.fatal(
+        "Failed to boot due to uncaught exception \"#{e.message}\" " \
+        "(double check your bot token)"
+      )
     rescue Interrupt
       shutdown
     end
@@ -41,6 +46,8 @@ module DiscordBot
     def setup_bot
       logger.info 'Initializing bot'
       initializers.each(&:init)
+    rescue Discordrb::Errors::UnknownError => e
+      raise DiscordBot::Errors::FailedToBoot, e.message
     end
 
     # HACK: This feels a bit sussy

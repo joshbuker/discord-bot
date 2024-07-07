@@ -3,7 +3,7 @@ module DiscordBot
     class Service
       attr_reader :api_url
 
-      def initialize(**options)
+      def initialize(options = {})
         @api_url = options[:api_url] || default_api_url
       end
 

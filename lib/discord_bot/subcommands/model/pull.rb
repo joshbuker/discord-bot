@@ -23,7 +23,10 @@ module DiscordBot
             "#{command_event.whois} has requested the LLM model #{requested_model}"
           )
           command_event.respond_with("Pulling LLM model \"#{requested_model}\"...")
-          model = DiscordBot::LLM::Model.new(model_name: requested_model)
+          model = DiscordBot::GenAI::Text::Model.new(
+            model_name: requested_model,
+            bot: bot
+          )
           if model.available?
             command_event.update_response(
               "\"#{requested_model}\" is already available"

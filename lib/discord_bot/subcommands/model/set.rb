@@ -12,7 +12,10 @@ module DiscordBot
 
         def run(command_event)
           requested_model = command_event.options['model']
-          model = DiscordBot::LLM::Model.new(model_name: requested_model)
+          model = DiscordBot::GenAI::Text::Model.new(
+            model_name: requested_model,
+            bot: bot
+          )
           if model.available?
             logger.info(
               "#{command_event.whois} has set the LLM model to " \

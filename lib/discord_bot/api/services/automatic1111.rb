@@ -28,6 +28,7 @@ module DiscordBot
               nudenet_nsfw_censor_enable: false
             }
           }.to_json
+
           post('/sdapi/v1/txt2img', payload)
         end
 
@@ -46,6 +47,7 @@ module DiscordBot
             height:          image_options.height,
             init_images:     [image_options.base_image]
           }.to_json
+
           post('/sdapi/v1/img2img', payload)
         end
 
@@ -58,6 +60,7 @@ module DiscordBot
           payload = {
             input_image: input_image
           }.to_json
+
           post('/nudenet/censor', payload)
         end
       end

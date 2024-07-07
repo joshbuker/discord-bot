@@ -9,5 +9,6 @@ module DiscordBot
     class FailedToPullModel < DiscordBot::Error; end
     class PermissionDenied < DiscordBot::Error; end
     class InvalidConfig < DiscordBot::Error; end
+    class FailedToBoot < DiscordBot::Error; end
   end
 end

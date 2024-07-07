@@ -40,7 +40,8 @@ module DiscordBot
           command_event.respond_with('Generating image')
           begin
             image = DiscordBot::GenAI::Image::Response.create(
-              image_options: image_options
+              image_options: image_options,
+              bot: bot
             )
           rescue StandardError => e
             logger.info "Failed to generate image due to:\n#{e.message}"
@@ -69,7 +70,7 @@ module DiscordBot
 
         private
 
-        def prevent_direct_messages!(command_event)
+        def prevent_direct_messages!(command_event, image_options)
           return unless command_event.direct_message?
 
           logger.info(

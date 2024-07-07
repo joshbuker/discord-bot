@@ -20,7 +20,7 @@ module DiscordBot
           if command_event.options['reset_history']
             bot.conversation(command_event.channel_id).reset_history
           end
-          command.respond_with(
+          command_event.respond_with(
             "System prompt reset to default:\n\n#{default_prompt}",
             only_to_user: false
           )

@@ -30,7 +30,7 @@ module DiscordBot
     end
 
     def reset_model
-      @model = DiscordBot::GenAI::Text::Model.new
+      @model = DiscordBot::GenAI::Text::Model.new(bot: bot)
     end
 
     def reset_system_prompt
@@ -48,6 +48,10 @@ module DiscordBot
       end
 
       @model = new_model
+    end
+
+    def system_prompt
+      @chat_history.system_prompt
     end
 
     def system_prompt=(new_system_prompt)

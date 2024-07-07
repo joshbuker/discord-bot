@@ -41,7 +41,7 @@ module DiscordBot
       @log_file_path = settings(:log_file_path, DEFAULT_LOG_FILE_PATH)
       @automatic1111_api_url = settings(:automatic1111_api_url, DiscordBot::GenAI::Image::API_URL)
       @melotts_api_url = settings(:melotts_api_url, DiscordBot::GenAI::Voice::API_URL)
-      @automatic1111_api_url = settings(:ollama_api_url, DiscordBot::GenAI::Text::API_URL)
+      @ollama_api_url = settings(:ollama_api_url, DiscordBot::GenAI::Text::API_URL)
     end
     # rubocop:enable Layout/LineLength
 
