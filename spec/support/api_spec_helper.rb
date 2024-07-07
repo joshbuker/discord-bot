@@ -7,6 +7,9 @@ module ApiSpecHelper
         }),
         chat:              instance_double(RestClient::Response, {
           body: { message: { content: 'Some content' } }.to_json
+        }),
+        model_info:        instance_double(RestClient::Response, {
+          body: {}.to_json
         })
       })
     })
