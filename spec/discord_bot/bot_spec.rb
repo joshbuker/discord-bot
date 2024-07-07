@@ -30,7 +30,11 @@ RSpec.describe DiscordBot::Bot do
 
   describe 'run' do
     let(:bot) do
-      described_class.new(discord_bot: discord_bot_double, config: config)
+      described_class.new(
+        discord_bot: discord_bot_double,
+        config: config,
+        api: api_double
+      )
     end
     # REVIEW: Silences the logs while running tests
     #         (is there a better way to do this?)
