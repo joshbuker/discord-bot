@@ -24,12 +24,11 @@ module DiscordBot
 
         def generate
           time_before = Time.current
-          response = api.melotts.text_to_voice(
-            voice_options: voice_options
-          )
+          response = api.melotts.text_to_voice(voice_options: options)
           time_after = Time.current
           @time_taken = time_after - time_before
           @content = response.body
+          self
         end
 
         def file

@@ -9,8 +9,8 @@ module DiscordBot
         def register_options(options)
           options.string(:prompt, 'The text to be converted into speech', required: true)
           options.number(:playback_speed, 'How fast the speech should be (0.5 = half speed)')
-          options.string(:language, 'What language to generate in', choices: LANGUAGE_CHOICES)
-          options.string(:speaker_id, 'What accent to use, currently only supports English', choices: SPEAKER_ID_CHOICES)
+          options.string(:language, 'What language to generate in', choices: DiscordBot::GenAI::Voice::Options::LANGUAGE_CHOICES)
+          options.string(:speaker_id, 'What accent to use, currently only supports English', choices: DiscordBot::GenAI::Voice::Options::SPEAKER_ID_CHOICES)
         end
 
         def run(command_event)

@@ -26,7 +26,7 @@ module DiscordBot
 
         attr_reader :prompt, :playback_speed, :language, :speaker_id
 
-        def initialize(**options)
+        def initialize(options = {})
           @prompt = options[:prompt]
           @playback_speed = options[:playback_speed]
           @language = options[:language]

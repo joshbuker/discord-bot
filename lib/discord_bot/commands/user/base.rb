@@ -9,6 +9,7 @@ module DiscordBot
           logger.debug "Registering \"#{command_name}\" user command"
           bot.discord_bot.register_application_command(
             command_name,
+            nil,
             type: :user
           )
         end
@@ -33,7 +34,7 @@ module DiscordBot
         attr_reader :bot
 
         def require_admin!(command_event, reason = '')
-          return if command_event.ran_by_admin?
+          return if command_event.ran_by_admin?(bot)
 
           logger.warn(
             "#{command_event.whois} tried running the " \

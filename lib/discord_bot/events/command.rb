@@ -17,7 +17,7 @@ module DiscordBot
       end
 
       def bot_voice_channel
-        Bot.voice(server_id)&.channel
+        @event.bot.voice(server_id)&.channel
       end
 
       def user_voice_channel
@@ -36,8 +36,8 @@ module DiscordBot
         @event.server_id.nil?
       end
 
-      def ran_by_admin?
-        Config.admin_users.include?(user)
+      def ran_by_admin?(bot)
+        bot.config.admin_user_ids.include?(user.id)
       end
 
       def respond_with(response, only_to_user: true)

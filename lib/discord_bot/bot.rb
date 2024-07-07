@@ -31,6 +31,11 @@ module DiscordBot
       shutdown
     end
 
+    def shutdown
+      logger.info 'Shutting down'
+      discord_bot.stop
+    end
+
     private
 
     def setup_bot
@@ -53,11 +58,6 @@ module DiscordBot
       discord_bot.run(true)
       logger.info 'Bot running'
       discord_bot.join
-    end
-
-    def shutdown
-      logger.info 'Shutting down'
-      discord_bot.stop
     end
 
     def default_config

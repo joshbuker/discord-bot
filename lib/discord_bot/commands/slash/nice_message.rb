@@ -22,16 +22,20 @@ module DiscordBot
         def run(command_event)
           require_admin!(command_event) { return }
 
-          message = command.options['message']
+          target_user = DiscordBot::User.new(
+            bot.discord_bot.user(command_event.options['user'])
+          )
+          message = command_event.options['message']
           conversation = DiscordBot::Conversation.new(bot)
-          command.respond_with('Sending your nice message...')
+          command_event.respond_with('Sending your nice message...')
           response = conversation.generate_response(message)
-          command_event.target_user.direct_message(response.message)
-          command.update_response('Nice message sent')
+          target_user.direct_message(response.message)
+          command_event.update_response('Nice message sent')
           logger.info(
-            "Message sent: #{command.options['message']}\n" \
-            "Sender: #{command.whois}\n" \
-            "Sent to: #{user.whois}"
+            "Prompt: #{command_event.options['message']}\n" \
+            "Message sent: #{response.message}\n" \
+            "Sender: #{command_event.whois}\n" \
+            "Sent to: #{target_user.whois}"
           )
         end
       end

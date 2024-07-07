@@ -9,6 +9,7 @@ module DiscordBot
           logger.debug "Registering \"#{command_name}\" message command"
           bot.discord_bot.register_application_command(
             command_name,
+            nil,
             type: :message
           )
         end

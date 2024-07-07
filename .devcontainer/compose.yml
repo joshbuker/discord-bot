@@ -19,13 +19,13 @@ services:
     ports:
       - 11434:11434
     # Allow access to nvidia gpu
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [gpu]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   melotts:
     image: timhagel/melotts-api-server
@@ -36,22 +36,22 @@ services:
       DEFAULT_LANGUAGE: EN
       DEFAULT_SPEAKER_ID: EN-Default
 
-  # automatic1111:
-  #   image: ghcr.io/joshbuker/automatic1111-docker:main
-  #   volumes:
-  #     - "~/Stable Diffusion/model:/model:ro"
-  #     - venv:/app/venv
-  #     - repos:/app/repositories
-  #   tty: true
-  #   ports:
-  #     - 7860:7860
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: all
-  #             capabilities: [gpu]
+  automatic1111:
+    image: ghcr.io/joshbuker/automatic1111-docker:main
+    volumes:
+      - "~/Stable Diffusion/model:/model:ro"
+      - venv:/app/venv
+      - repos:/app/repositories
+    tty: true
+    ports:
+      - 7860:7860
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
 volumes:
   ollama: {}

@@ -6,20 +6,20 @@ module DiscordBot
           'Play tuturu in current voice channel'
         end
 
-        def run(_command_event)
-          voice_channel = command.bot_voice_channel
+        def run(command_event)
+          voice_channel = command_event.bot_voice_channel
           if connected_to_voice?(voice_channel)
-            voip = Bot.voice(voice_channel.id)
+            voip = bot.discord_bot.voice(voice_channel.id)
             if tuturu_sound_file.present?
               logger.info 'Playing tuturu.wav'
-              command.respond_with('Playing sound...')
+              command_event.respond_with('Playing sound...')
               voip.play_file(tuturu_sound_file)
-              command.update_response('Tuturu!')
+              command_event.update_response('Tuturu!')
             else
               logger.warn 'Could not find tuturu.wav'
             end
           else
-            command.respond_with(
+            command_event.respond_with(
               'Please connect to voice with `/voice connect` first'
             )
           end

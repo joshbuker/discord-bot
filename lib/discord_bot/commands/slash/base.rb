@@ -89,7 +89,7 @@ module DiscordBot
         end
 
         def require_admin!(command_event, reason = '')
-          return if command_event.ran_by_admin?
+          return if command_event.ran_by_admin?(bot)
 
           logger.warn(
             "#{command_event.whois} tried running the " \

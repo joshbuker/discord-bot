@@ -1,7 +1,10 @@
 module DiscordBot
   class MessageHandler
+    attr_reader :bot, :logger
+
     def initialize(bot)
       @bot = bot
+      @logger = bot.logger
     end
 
     def handle
@@ -11,9 +14,6 @@ module DiscordBot
     end
 
     private
-
-    # REVIEW: Should bot be a part of the public interface?
-    attr_reader :bot
 
     # TODO: Refactor this into a factory
     def handle_message(message)
@@ -49,7 +49,7 @@ module DiscordBot
     def reply_to_message(message)
       typing_thread = message.start_typing_thread
       begin
-        response = bot.conversation(channel_id).generate_response(message)
+        response = bot.conversation(message.channel_id).generate_response(message)
       ensure
         typing_thread.exit
       end

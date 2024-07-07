@@ -10,7 +10,7 @@ module DiscordBot
 
     def register(command)
       logger.debug(
-        "Registering /#{command.command_name} #{command_name} subcommand"
+        "Registering /#{base_command.command_name} #{command_name} subcommand"
       )
       command.subcommand(command_name, description) do |options|
         register_options(options)
@@ -49,7 +49,7 @@ module DiscordBot
     end
 
     def require_admin!(command, reason = '')
-      return if command.ran_by_admin?
+      return if command.ran_by_admin?(bot)
 
       logger.warn(
         "#{command.whois} tried running the #{command.command_name} " \

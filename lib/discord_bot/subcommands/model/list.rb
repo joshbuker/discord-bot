@@ -10,7 +10,7 @@ module DiscordBot
           logger.info(
             "#{command_event.whois} requested a list of the available models"
           )
-          models = DiscordBot::LLM::Model.available_models
+          models = DiscordBot::GenAI::Text::Model.available_models(bot)
           # TODO: Also show file size, parameter size, and quantization level
           formatted_list = models.map do |model|
             "- #{model.about}"
