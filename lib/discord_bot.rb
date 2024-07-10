@@ -14,6 +14,8 @@ require 'shellwords'
 require 'uri'
 # Allow processing Base64 images as files without needing to write to disk
 require 'stringio'
+# Allow receiving REST requests for callbacks
+require 'sinatra'
 
 # Monkey patches are great and never go wrong
 class Integer
@@ -232,6 +234,7 @@ module DiscordBot
   autoload :Initializer,    'discord_bot/initializer'
   autoload :Logger,         'discord_bot/logger'
   autoload :MessageHandler, 'discord_bot/message_handler'
+  autoload :Server,         'discord_bot/server'
   autoload :Subcommand,     'discord_bot/subcommand'
   autoload :User,           'discord_bot/user'
   # autoload :VERSION, 'discord_bot/version'

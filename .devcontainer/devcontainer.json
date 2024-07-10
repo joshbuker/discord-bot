@@ -8,12 +8,19 @@
   "customizations": {
     // Configure properties specific to VS Code.
     "vscode": {
+      "settings": {"remote.autoForwardPorts": false},
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
         "castwide.solargraph"
       ]
     }
   },
+
+  "forwardPorts": [4567],
+
+  // "otherPortsAttributes": {
+  //   "onAutoForward": "ignore"
+  // },
 
   "initializeCommand": "bash .devcontainer/initialize.sh",
   // Use 'postCreateCommand' to run commands after the container is created.

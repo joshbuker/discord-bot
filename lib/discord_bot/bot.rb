@@ -4,6 +4,7 @@ module DiscordBot
   #
   class Bot
     attr_reader :config, :discord_bot, :logger, :api
+    attr_accessor :server_thread
 
     def initialize(config: default_config, discord_bot: nil, api: nil)
       @config = config
@@ -38,7 +39,9 @@ module DiscordBot
 
     def shutdown
       logger.info 'Shutting down'
+      server_thread&.exit
       discord_bot.stop
+      exit
     end
 
     private
