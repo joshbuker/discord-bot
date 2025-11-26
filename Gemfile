@@ -6,6 +6,7 @@ gem 'discordrb'
 gem 'opus-ruby'
 # FIXME: Rest Client is completely unmaintained, move away from it ASAP
 gem 'rest-client'
+gem 'dependency-timeline-audit'
 
 # FIXME: Don't load dev dependencies in production Dockerfile
 group :test do
