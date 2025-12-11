@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     tty: true
     environment:
-      - RUBY_DISCORD_BOT_TOKEN=${RUBY_DISCORD_BOT_TOKEN:?Please configure RUBY_DISCORD_BOT_TOKEN}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN:?Please configure DISCORD_BOT_TOKEN}
       - DEFAULT_LLM_MODEL=${DEFAULT_LLM_MODEL:-"llama3"}
       # - OLLAMA_SERVICE_NAME=${OLLAMA_SERVICE_NAME:?Please configure OLLAMA_SERVICE_NAME}
 
