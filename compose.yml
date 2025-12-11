@@ -26,9 +26,10 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
+            - driver: cdi
               capabilities: [gpu]
+              device_ids:
+                - nvidia.com/gpu=all
 
   ollama:
     image: ollama/ollama
@@ -40,9 +41,10 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
+            - driver: cdi
               capabilities: [gpu]
+              device_ids:
+                - nvidia.com/gpu=all
 
 volumes:
   ollama: {}

@@ -23,9 +23,10 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
+            - driver: cdi
               capabilities: [gpu]
+              device_ids:
+                - nvidia.com/gpu=all
 
   melotts:
     image: timhagel/melotts-api-server
@@ -49,9 +50,10 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
+            - driver: cdi
               capabilities: [gpu]
+              device_ids:
+                - nvidia.com/gpu=all
 
 volumes:
   ollama: {}
