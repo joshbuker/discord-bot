@@ -78,16 +78,10 @@ If however, you're looking to use this as a service, you can run it using Docker
 docker compose up -d
 ```
 
-Follow the logs by grabbing the docker container id:
+Follow the logs using (exit logs with `ctrl+c`):
 
 ```sh
-docker ps
-```
-
-Then tailing the logs (exit logs with `ctrl+c`):
-
-```sh
-docker logs -f container_id
+docker compose logs -f bot
 ```
 
 To bring down the service and update it:
